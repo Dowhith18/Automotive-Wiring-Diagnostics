@@ -1,0 +1,65 @@
+/* Dark automotive theme */
+:root {
+    --primary-blue: #1e40af;
+    --secondary-amber: #f59e0b;
+    --danger-red: #ef4444;
+    --bg-dark: #0f172a;
+    --surface-dark: #1e293b;
+    --text-light: #f1f5f9;
+    --text-secondary: #94a3b8;
+}
+
+/* Responsive grid layout */
+.app-main {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .app-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Interactive form styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.predict-btn {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-amber));
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.predict-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Results visualization */
+.fault-prediction {
+    background: var(--surface-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--danger-red);
+}
+
+.confidence-score {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.confidence-bar {
+    height: 8px;
+    background: var(--primary-blue);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}

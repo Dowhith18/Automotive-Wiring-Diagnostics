@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoDiag - Automotive Wiring Diagnostics</title>
+    <meta name="description" content="AI-powered automotive electrical fault diagnosis with interactive troubleshooting manual">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/dark-theme.css">
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e40af">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+</head>
+
+<body class="dark-theme">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>🔌 Loading AutoDiag</h2>
+            <p>Preparing ML models...</p>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <nav class="main-navigation">
+                <div class="logo">
+                    <span class="logo-icon">🔌</span>
+                    <span class="logo-text">AutoDiag</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                    <li><a href="#diagnostics" class="nav-link">Diagnostics</a></li>
+                    <li><a href="#manual" class="nav-link">Manual</a></li>
+                    <li><a href="#tools" class="nav-link">Tools</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">🌙</button>
+                    <button id="install-pwa" class="install-btn hidden" title="Install App">📱</button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="dashboard-grid">
+                    <!-- Quick Stats -->
+                    <div class="stats-panel">
+                        <h2>Quick Stats</h2>
+                        <div class="stat-cards">
+                            <div class="stat-card">
+                                <div class="stat-value">1,247</div>
+                                <div class="stat-label">Diagnostics Run</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">87%</div>
+                                <div class="stat-label">Accuracy Rate</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">1.8s</div>
+                                <div class="stat-label">Avg Response</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="activity-panel">
+                        <h3>Recent Diagnostics</h3>
+                        <div id="recent-activity" class="activity-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagnostics Section -->
+            <section id="diagnostics-section" class="content-section">
+                <div class="diagnostics-container">
+                    <!-- Input Panel -->
+                    <div class="input-panel">
+                        <h2>Fault Prediction</h2>
+                        
+                        <form id="diagnostic-form" class="diagnostic-form">
+                            <!-- Vehicle Information -->
+                            <div class="form-section">
+                                <h3>Vehicle Information</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="vehicle-make">Make</label>
+                                        <select id="vehicle-make" required>
+                                            <option value="">Select Make</option>
+                                            <option value="toyota">Toyota</option>
+                                            <option value="ford">Ford</option>
+                                            <option value="chevrolet">Chevrolet</option>
+                                            <option value="honda">Honda</option>
+                                            <option value="nissan">Nissan</option>
+                                            <option value="bmw">BMW</option>
+                                            <option value="mercedes">Mercedes-Benz</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="vehicle-year">Year</label>
+                                        <input type="number" id="vehicle-year" min="1990" max="2025" placeholder="2020">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="vehicle-model">Model (Optional)</label>
+                                    <input type="text" id="vehicle-model" placeholder="e.g., Camry, F-150">
+                                </div>
+                            </div>
+
+                            <!-- Electrical Readings -->
+                            <div class="form-section">
+                                <h3>Electrical Measurements</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="battery-voltage">Battery Voltage (V)</label>
+                                        <input type="number" id="battery-voltage" step="0.1" min="0" max="24" placeholder="12.6">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="system-current">System Current (A)</label>
+                                        <input type="number" id="system-current" step="0.1" min="0" placeholder="2.5">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="resistance-reading">Resistance (Ω)</label>
+                                        <input type="number" id="resistance-reading" step="0.01" min="0" placeholder="0.5">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="temperature">Temperature (°C)</label>
+                                        <input type="number" id="temperature" step="1" placeholder="25">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Symptoms Checklist -->
+                            <div class="form-section">
+                                <h3>Observed Symptoms</h3>
+                                <div class="symptoms-grid">
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="no_start">
+                                        <span class="checkmark"></span>
+                                        Engine won't start
+                                    </label>
+                                    
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="intermittent_power">
+                                        <span class="checkmark"></span>
+                                        Intermittent power loss
+                                    </label>
+                                    
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="burning_smell">
+                                        <span class="checkmark"></span>
+                                        Burning smell
+                                    </label>
+                                    
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="blown_fuses">
+                                        <span class="checkmark"></span>
+                                        Blown fuses
+                                    </label>
+                                    
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="corrosion_visible">
+                                        <span class="checkmark"></span>
+                                        Visible corrosion
+                                    </label>
+                                    
+                                    <label class="symptom-checkbox">
+                                        <input type="checkbox" value="flickering_lights">
+                                        <span class="checkmark"></span>
+                                        Flickering lights
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="form-actions">
+                                <button type="reset" class="btn btn-secondary">Clear Form</button>
+                                <button type="submit" class="btn btn-primary predict-btn">
+                                    <span class="btn-text">Analyze Issue</span>
+                                    <span class="btn-spinner hidden">🔄</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div id="results-panel" class="results-panel hidden">
+                        <h2>Diagnostic Results</h2>
+                        
+                        <!-- Prediction Results -->
+                        <div class="prediction-card">
+                            <div class="prediction-header">
+                                <h3>Predicted Fault</h3>
+                                <div class="confidence-badge">
+                                    <span id="confidence-percentage">--</span>% confidence
+                                </div>
+                            </div>
+                            
+                            <div class="fault-details">
+                                <div id="fault-type" class="fault-type">--</div>
+                                <div id="fault-description" class="fault-description">--</div>
+                                <div id="severity-indicator" class="severity-indicator">
+                                    <span class="severity-label">Severity:</span>
+                                    <div class="severity-meter">
+                                        <div class="severity-fill"></div>
+                                    </div>
+                                    <span id="severity-text">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recommendations -->
+                        <div class="recommendations-card">
+                            <h3>Recommended Actions</h3>
+                            <div id="recommendations-list" class="recommendations-list">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Probability Chart -->
+                        <div class="chart-card">
+                            <h3>Fault Probability Distribution</h3>
+                            <canvas id="probability-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manual Section -->
+            <section id="manual-section" class="content-section">
+                <div class="manual-container">
+                    <div class="manual-sidebar">
+                        <div class="search-box">
+                            <input type="text" id="manual-search" placeholder="Search diagnostics...">
+                            <button class="search-btn">🔍</button>
+                        </div>
+                        
+                        <div class="manual-categories">
+                            <h3>Categories</h3>
+                            <ul class="category-list">
+                                <li><a href="#" data-category="electrical">Electrical Systems</a></li>
+                                <li><a href="#" data-category="ignition">Ignition</a></li>
+                                <li><a href="#" data-category="charging">Charging System</a></li>
+                                <li><a href="#" data-category="lighting">Lighting</a></li>
+                                <li><a href="#" data-category="accessories">Accessories</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="manual-content">
+                        <div id="manual-results" class="manual-results">
+                            <!-- Populated by search or category selection -->
+                        </div>
+                        
+                        <div id="manual-detail" class="manual-detail hidden">
+                            <!-- Detailed diagnostic procedure -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Section -->
+            <section id="tools-section" class="content-section">
+                <div class="tools-container">
+                    <h2>Diagnostic Tools</h2>
+                    
+                    <div class="tools-grid">
+                        <!-- Voltage Calculator -->
+                        <div class="tool-card">
+                            <h3>Voltage Drop Calculator</h3>
+                            <div class="tool-inputs">
+                                <input type="number" placeholder="Current (A)" id="calc-current">
+                                <input type="number" placeholder="Wire Length (ft)" id="calc-length">
+                                <select id="calc-gauge">
+                                    <option value="">Wire Gauge</option>
+                                    <option value="12">12 AWG</option>
+                                    <option value="14">14 AWG</option>
+                                    <option value="16">16 AWG</option>
+                                    <option value="18">18 AWG</option>
+                                </select>
+                                <button class="tool-btn" onclick="calculateVoltageDrop()">Calculate</button>
+                            </div>
+                            <div id="voltage-result" class="tool-result"></div>
+                        </div>
+                        
+                        <!-- Wire Color Reference -->
+                        <div class="tool-card">
+                            <h3>Wire Color Code</h3>
+                            <div class="color-reference">
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: red;"></div>
+                                    <span>Red - Power/Positive</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: black;"></div>
+                                    <span>Black - Ground/Negative</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: yellow;"></div>
+                                    <span>Yellow - Left Turn/Caution</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: green;"></div>
+                                    <span>Green - Right Turn</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: blue;"></div>
+                                    <span>Blue - Electric Brake</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-swatch" style="background: brown;"></div>
+                                    <span>Brown - Tail/Parking</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ohm's Law Calculator -->
+                        <div class="tool-card">
+                            <h3>Ohm's Law Calculator</h3>
+                            <div class="ohms-calculator">
+                                <div class="calc-row">
+                                    <label>Voltage (V):</label>
+                                    <input type="number" id="ohms-voltage" placeholder="12">
+                                </div>
+                                <div class="calc-row">
+                                    <label>Current (A):</label>
+                                    <input type="number" id="ohms-current" placeholder="2">
+                                </div>
+                                <div class="calc-row">
+                                    <label>Resistance (Ω):</label>
+                                    <input type="number" id="ohms-resistance" placeholder="6">
+                                </div>
+                                <button class="tool-btn" onclick="calculateOhmsLaw()">Calculate</button>
+                                <div id="ohms-result" class="tool-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>&copy; 2025 AutoDiag - Automotive Wiring Diagnostics</p>
+                <div class="footer-links">
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#privacy">Privacy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.12.0/tf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/ml-models.js"></script>
+    <script src="assets/js/diagnostics.js"></script>
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
