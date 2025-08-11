@@ -10,7 +10,7 @@ AI-powered diagnostic system for automotive electrical issues with interactive t
 - Mobile-responsive design
 
 ## 🚀 Live Demo
-[View Application](https://yourusername.github.io/automotive-wiring-diagnostics)
+[View Application](https://dowhith18.github.io/Automotive-Wiring-Diagnostics/)
 
 ## 📊 Datasets Used
 - Electrical Fault Detection (Kaggle)
