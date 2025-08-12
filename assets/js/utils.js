@@ -1,586 +1,409 @@
 /**
- * Utility functions for AutoDiag application
+ * Utility Functions
+ * Common helper functions used throughout the application
  */
-
-// ===== DOM UTILITIES =====
-const $ = (selector) => document.querySelector(selector);
-const $ = (selector) => document.querySelectorAll(selector);
-
-// ===== LOCAL STORAGE UTILITIES =====
-const Storage = {
-  get(key, defaultValue = null) {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : defaultValue;
-    } catch (error) {
-      console.error('Error reading from localStorage:', error);
-      return defaultValue;
-    }
-  },
-
-  set(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-      return true;
-    } catch (error) {
-      console.error('Error writing to localStorage:', error);
-      return false;
-    }
-  },
-
-  remove(key) {
-    try {
-      localStorage.removeItem(key);
-      return true;
-    } catch (error) {
-      console.error('Error removing from localStorage:', error);
-      return false;
-    }
-  },
-
-  clear() {
-    try {
-      localStorage.clear();
-      return true;
-    } catch (error) {
-      console.error('Error clearing localStorage:', error);
-      return false;
-    }
-  }
-};
-
-// ===== NOTIFICATION SYSTEM =====
-const Notifications = {
-  container: null,
-
-  init() {
-    if (!this.container) {
-      this.container = document.createElement('div');
-      this.container.id = 'notifications-container';
-      this.container.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        pointer-events: none;
-      `;
-      document.body.appendChild(this.container);
-    }
-  },
-
-  show(message, type = 'info', duration = 5000) {
-    this.init();
-
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.style.cssText = `
-      pointer-events: auto;
-      margin-bottom: 10px;
-      padding: 16px;
-      background: var(--surface-dark);
-      border-radius: 8px;
-      border: 1px solid var(--surface-light);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      animation: slideInRight 0.3s ease;
-      max-width: 400px;
-      position: relative;
-    `;
-
-    const colors = {
-      success: '#10b981',
-      error: '#ef4444',
-      warning: '#f59e0b',
-      info: '#3b82f6'
-    };
-
-    if (colors[type]) {
-      notification.style.borderLeftColor = colors[type];
-      notification.style.borderLeftWidth = '4px';
-    }
-
-    notification.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 8px; color: var(--text-light);">
-        <span style="font-size: 1.2em;">${this.getIcon(type)}</span>
-        <span>${message}</span>
-        <button onclick="this.parentElement.parentElement.remove()" 
-                style="margin-left: auto; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2em;">×</button>
-      </div>
-    `;
-
-    this.container.appendChild(notification);
-
-    if (duration > 0) {
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.style.animation = 'slideOutRight 0.3s ease';
-          setTimeout(() => notification.remove(), 300);
-        }
-      }, duration);
-    }
-
-    return notification;
-  },
-
-  getIcon(type) {
-    const icons = {
-      success: '✅',
-      error: '❌',
-      warning: '⚠️',
-      info: 'ℹ️'
-    };
-    return icons[type] || icons.info;
-  },
-
-  success(message, duration) {
-    return this.show(message, 'success', duration);
-  },
-
-  error(message, duration) {
-    return this.show(message, 'error', duration);
-  },
-
-  warning(message, duration) {
-    return this.show(message, 'warning', duration);
-  },
-
-  info(message, duration) {
-    return this.show(message, 'info', duration);
-  }
-};
-
-// ===== VALIDATION UTILITIES =====
-const Validator = {
-  email(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  },
-
-  phone(phone) {
-    const re = /^[\+]?[1-9][\d]{0,15}$/;
-    return re.test(phone.replace(/\D/g, ''));
-  },
-
-  required(value) {
-    return value !== null && value !== undefined && String(value).trim() !== '';
-  },
-
-  minLength(value, min) {
-    return String(value).length >= min;
-  },
-
-  maxLength(value, max) {
-    return String(value).length <= max;
-  },
-
-  numeric(value) {
-    return !isNaN(parseFloat(value)) && isFinite(value);
-  },
-
-  positive(value) {
-    return this.numeric(value) && parseFloat(value) > 0;
-  },
-
-  range(value, min, max) {
-    const num = parseFloat(value);
-    return this.numeric(value) && num >= min && num <= max;
-  }
-};
-
-// ===== DATE/TIME UTILITIES =====
-const DateUtils = {
-  format(date, format = 'YYYY-MM-DD') {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
-
-    return format
-      .replace('YYYY', year)
-      .replace('MM', month)
-      .replace('DD', day)
-      .replace('HH', hours)
-      .replace('mm', minutes)
-      .replace('ss', seconds);
-  },
-
-  timeAgo(date) {
-    const now = new Date();
-    const diff = now - new Date(date);
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    return 'Just now';
-  },
-
-  isToday(date) {
-    const today = new Date();
-    const checkDate = new Date(date);
-    return today.toDateString() === checkDate.toDateString();
-  }
-};
-
-// ===== ARRAY UTILITIES =====
-const ArrayUtils = {
-  unique(array) {
-    return [...new Set(array)];
-  },
-
-  shuffle(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  },
-
-  chunk(array, size) {
-    const chunks = [];
-    for (let i = 0; i < array.length; i += size) {
-      chunks.push(array.slice(i, i + size));
-    }
-    return chunks;
-  },
-
-  sortBy(array, key, direction = 'asc') {
-    return [...array].sort((a, b) => {
-      const aValue = typeof key === 'function' ? key(a) : a[key];
-      const bValue = typeof key === 'function' ? key(b) : b[key];
-      
-      if (direction === 'desc') {
-        return bValue > aValue ? 1 : bValue < aValue ? -1 : 0;
-      }
-      return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
-    });
-  }
-};
-
-// ===== STRING UTILITIES =====
-const StringUtils = {
-  capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  },
-
-  slugify(str) {
-    return str
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  },
-
-  truncate(str, length, suffix = '...') {
-    if (str.length <= length) return str;
-    return str.substring(0, length) + suffix;
-  },
-
-  template(str, variables) {
-    return str.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-      return variables[key] || match;
-    });
-  }
-};
-
-// ===== PERFORMANCE UTILITIES =====
-const Performance = {
-  measure(name, fn) {
-    const start = performance.now();
-    const result = fn();
-    const end = performance.now();
-    console.log(`${name}: ${end - start}ms`);
-    return result;
-  },
-
-  async measureAsync(name, fn) {
-    const start = performance.now();
-    const result = await fn();
-    const end = performance.now();
-    console.log(`${name}: ${end - start}ms`);
-    return result;
-  },
-
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  },
-
-  throttle(func, limit) {
-    let inThrottle;
-    return function(...args) {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
-      }
-    };
-  }
-};
-
-// ===== API UTILITIES =====
-const API = {
-  async request(url, options = {}) {
-    const defaultOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    };
-
-    const config = { ...defaultOptions, ...options };
-
-    try {
-      const response = await fetch(url, config);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        return await response.json();
-      }
-      
-      return await response.text();
-    } catch (error) {
-      console.error('API request failed:', error);
-      throw error;
-    }
-  },
-
-  get(url, options = {}) {
-    return this.request(url, { ...options, method: 'GET' });
-  },
-
-  post(url, data, options = {}) {
-    return this.request(url, {
-      ...options,
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-  },
-
-  put(url, data, options = {}) {
-    return this.request(url, {
-      ...options,
-      method: 'PUT',
-      body: JSON.stringify(data)
-    });
-  },
-
-  delete(url, options = {}) {
-    return this.request(url, { ...options, method: 'DELETE' });
-  }
-};
-
-// ===== ELECTRICAL CALCULATION UTILITIES =====
-const ElectricalUtils = {
-  // Ohm's Law calculations
-  calculateVoltage(current, resistance) {
-    return current * resistance;
-  },
-
-  calculateCurrent(voltage, resistance) {
-    return resistance !== 0 ? voltage / resistance : 0;
-  },
-
-  calculateResistance(voltage, current) {
-    return current !== 0 ? voltage / current : 0;
-  },
-
-  calculatePower(voltage, current) {
-    return voltage * current;
-  },
-
-  // Wire gauge calculations
-  getWireResistance(gauge, length) {
-    const resistancePerFoot = {
-      '12': 0.00193,  // ohms per foot
-      '14': 0.00307,
-      '16': 0.00488,
-      '18': 0.00777,
-      '20': 0.01237
-    };
-    return (resistancePerFoot[gauge] || 0) * length;
-  },
-
-  calculateVoltageDrop(current, wireGauge, length) {
-    const resistance = this.getWireResistance(wireGauge, length);
-    return current * resistance;
-  },
-
-  // Battery calculations
-  calculateBatteryHealth(measuredVoltage, ratedVoltage = 12.6) {
-    const percentage = (measuredVoltage / ratedVoltage) * 100;
-    return Math.min(100, Math.max(0, percentage));
-  },
-
-  getBatteryStatus(voltage) {
-    if (voltage >= 12.6) return { status: 'Good', color: '#10b981' };
-    if (voltage >= 12.0) return { status: 'Weak', color: '#f59e0b' };
-    if (voltage >= 11.5) return { status: 'Poor', color: '#ef4444' };
-    return { status: 'Dead', color: '#dc2626' };
-  }
-};
-
-// ===== DIAGNOSTIC DATA STRUCTURES =====
-const DiagnosticData = {
-  faultTypes: {
-    SHORT_CIRCUIT: 'short_circuit',
-    OPEN_CIRCUIT: 'open_circuit',
-    INSULATION_BREAKDOWN: 'insulation_breakdown',
-    CONNECTOR_CORROSION: 'connector_corrosion',
-    WIRE_FATIGUE: 'wire_fatigue',
-    GROUND_FAULT: 'ground_fault',
-    OVERLOAD: 'overload'
-  },
-
-  severityLevels: {
-    LOW: { level: 1, label: 'Low', color: '#10b981' },
-    MEDIUM: { level: 2, label: 'Medium', color: '#f59e0b' },
-    HIGH: { level: 3, label: 'High', color: '#ef4444' },
-    CRITICAL: { level: 4, label: 'Critical', color: '#dc2626' }
-  },
-
-  vehicleMakes: [
-    'Toyota', 'Ford', 'Chevrolet', 'Honda', 'Nissan', 
-    'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai',
-    'Kia', 'Mazda', 'Subaru', 'Volvo', 'Jeep'
-  ],
-
-  symptoms: [
-    { id: 'no_start', label: 'Engine won\'t start', category: 'starting' },
-    { id: 'intermittent_power', label: 'Intermittent power loss', category: 'power' },
-    { id: 'burning_smell', label: 'Burning smell', category: 'warning' },
-    { id: 'blown_fuses', label: 'Blown fuses', category: 'electrical' },
-    { id: 'corrosion_visible', label: 'Visible corrosion', category: 'physical' },
-    { id: 'flickering_lights', label: 'Flickering lights', category: 'lighting' },
-    { id: 'dead_battery', label: 'Dead battery', category: 'power' },
-    { id: 'overheating', label: 'Component overheating', category: 'thermal' }
-  ]
-};
-
-// ===== ANIMATION UTILITIES =====
-const AnimationUtils = {
-  fadeIn(element, duration = 300) {
-    element.style.opacity = '0';
-    element.style.display = 'block';
+class Utils {
     
-    return new Promise(resolve => {
-      const start = performance.now();
-      
-      function animate(currentTime) {
-        const elapsed = currentTime - start;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        element.style.opacity = progress;
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          resolve();
-        }
-      }
-      
-      requestAnimationFrame(animate);
-    });
-  },
+    // DOM Manipulation Helpers
+    static createElement(tag, className, textContent) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (textContent) element.textContent = textContent;
+        return element;
+    }
 
-  fadeOut(element, duration = 300) {
-    return new Promise(resolve => {
-      const start = performance.now();
-      const initialOpacity = parseFloat(getComputedStyle(element).opacity);
-      
-      function animate(currentTime) {
-        const elapsed = currentTime - start;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        element.style.opacity = initialOpacity * (1 - progress);
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          element.style.display = 'none';
-          resolve();
-        }
-      }
-      
-      requestAnimationFrame(animate);
-    });
-  },
+    static $(selector) {
+        return document.querySelector(selector);
+    }
 
-  slideDown(element, duration = 300) {
-    element.style.height = '0px';
-    element.style.overflow = 'hidden';
-    element.style.display = 'block';
-    
-    const fullHeight = element.scrollHeight;
-    
-    return new Promise(resolve => {
-      const start = performance.now();
-      
-      function animate(currentTime) {
-        const elapsed = currentTime - start;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        element.style.height = (fullHeight * progress) + 'px';
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          element.style.height = '';
-          element.style.overflow = '';
-          resolve();
-        }
-      }
-      
-      requestAnimationFrame(animate);
-    });
-  }
-};
+    static $$(selector) {
+        return Array.from(document.querySelectorAll(selector));
+    }
 
-// ===== EXPORT FOR MODULE SYSTEMS =====
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    Storage,
-    Notifications,
-    Validator,
-    DateUtils,
-    ArrayUtils,
-    StringUtils,
-    Performance,
-    API,
-    ElectricalUtils,
-    DiagnosticData,
-    AnimationUtils
-  };
+    // Animation Helpers
+    static fadeIn(element, duration = 300) {
+        element.style.opacity = '0';
+        element.style.display = 'block';
+        
+        const start = performance.now();
+        
+        const animate = (timestamp) => {
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            element.style.opacity = progress.toString();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    }
+
+    static fadeOut(element, duration = 300) {
+        const start = performance.now();
+        const startOpacity = parseFloat(window.getComputedStyle(element).opacity);
+        
+        const animate = (timestamp) => {
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            element.style.opacity = (startOpacity * (1 - progress)).toString();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                element.style.display = 'none';
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    }
+
+    static slideUp(element, duration = 300) {
+        const height = element.scrollHeight;
+        element.style.height = height + 'px';
+        element.style.overflow = 'hidden';
+        
+        const start = performance.now();
+        
+        const animate = (timestamp) => {
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            element.style.height = (height * (1 - progress)) + 'px';
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                element.style.display = 'none';
+                element.style.height = '';
+                element.style.overflow = '';
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    }
+
+    // Data Validation
+    static validateEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    static validateVIN(vin) {
+        // Basic VIN validation (17 characters, alphanumeric except I, O, Q)
+        const regex = /^[A-HJ-NPR-Z0-9]{17}$/;
+        return regex.test(vin);
+    }
+
+    static validateDTC(dtc) {
+        // Basic DTC format validation (P0123, B1234, etc.)
+        const regex = /^[PCBU][0-3][0-9A-F]{3}$/i;
+        return regex.test(dtc);
+    }
+
+    static sanitizeInput(input) {
+        if (typeof input !== 'string') return input;
+        return input.replace(/[<>'"&]/g, '');
+    }
+
+    // Data Formatting
+    static formatVoltage(voltage) {
+        if (voltage === null || voltage === undefined) return 'N/A';
+        return voltage.toFixed(2) + 'V';
+    }
+
+    static formatResistance(resistance) {
+        if (resistance === null || resistance === undefined) return 'N/A';
+        if (resistance < 1) {
+            return (resistance * 1000).toFixed(0) + 'mΩ';
+        }
+        return resistance.toFixed(2) + 'Ω';
+    }
+
+    static formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleString();
+    }
+
+    static formatConfidence(confidence) {
+        return Math.round(confidence * 100) + '%';
+    }
+
+    // Local Storage Helpers
+    static saveToStorage(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Failed to save to storage:', error);
+            return false;
+        }
+    }
+
+    static loadFromStorage(key, defaultValue = null) {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        } catch (error) {
+            console.error('Failed to load from storage:', error);
+            return defaultValue;
+        }
+    }
+
+    static removeFromStorage(key) {
+        try {
+            localStorage.removeItem(key);
+            return true;
+        } catch (error) {
+            console.error('Failed to remove from storage:', error);
+            return false;
+        }
+    }
+
+    // Network Helpers
+    static async fetchWithTimeout(url, options = {}, timeout = 5000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(id);
+            return response;
+        } catch (error) {
+            clearTimeout(id);
+            throw error;
+        }
+    }
+
+    static isOnline() {
+        return navigator.onLine;
+    }
+
+    // Device Detection
+    static isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    static isTablet() {
+        return /iPad|Android/i.test(navigator.userAgent) && !this.isMobile();
+    }
+
+    static isDesktop() {
+        return !this.isMobile() && !this.isTablet();
+    }
+
+    static getDeviceType() {
+        if (this.isMobile()) return 'mobile';
+        if (this.isTablet()) return 'tablet';
+        return 'desktop';
+    }
+
+    // File Helpers
+    static downloadJSON(data, filename) {
+        const jsonData = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    static downloadCSV(data, filename, headers) {
+        let csvContent = '';
+        
+        // Add headers
+        if (headers) {
+            csvContent += headers.join(',') + '\n';
+        }
+        
+        // Add data rows
+        data.forEach(row => {
+            const csvRow = Array.isArray(row) ? row : Object.values(row);
+            csvContent += csvRow.map(field => 
+                typeof field === 'string' ? `"${field}"` : field
+            ).join(',') + '\n';
+        });
+        
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Mathematical Helpers
+    static clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    static lerp(start, end, factor) {
+        return start + (end - start) * factor;
+    }
+
+    static roundToDecimal(value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    }
+
+    static calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in km
+        const dLat = this.toRadians(lat2 - lat1);
+        const dLon = this.toRadians(lon2 - lon1);
+        
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    static toRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+
+    // Array Helpers
+    static shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    static uniqueArray(array, key) {
+        if (key) {
+            const seen = new Set();
+            return array.filter(item => {
+                const value = item[key];
+                if (seen.has(value)) return false;
+                seen.add(value);
+                return true;
+            });
+        }
+        return [...new Set(array)];
+    }
+
+    static groupBy(array, key) {
+        return array.reduce((groups, item) => {
+            const value = typeof key === 'function' ? key(item) : item[key];
+            (groups[value] = groups[value] || []).push(item);
+            return groups;
+        }, {});
+    }
+
+    // String Helpers
+    static capitalizeFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    static camelToKebab(str) {
+        return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    }
+
+    static kebabToCamel(str) {
+        return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+    }
+
+    static truncate(str, length, suffix = '...') {
+        if (str.length <= length) return str;
+        return str.substring(0, length - suffix.length) + suffix;
+    }
+
+    // Color Helpers
+    static hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    static rgbToHex(r, g, b) {
+        return '#' + [r, g, b].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }).join('');
+    }
+
+    // Debounce and Throttle
+    static debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    static throttle(func, limit) {
+        let inThrottle;
+        return function (...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    }
+
+    // Error Handling
+    static createError(message, code, details) {
+        const error = new Error(message);
+        error.code = code;
+        error.details = details;
+        return error;
+    }
+
+    static logError(error, context = '') {
+        const errorInfo = {
+            message: error.message,
+            stack: error.stack,
+            context: context,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            url: window.location.href
+        };
+        
+        console.error('Application Error:', errorInfo);
+        
+        // In production, you might want to send this to an error reporting service
+        // this.sendErrorReport(errorInfo);
+    }
+
+    // Performance Helpers
+    static measurePerformance(name, fn) {
+        const start = performance.now();
+        const result = fn();
+        const end = performance.now();
+        console.log(`${name} took ${end - start} milliseconds`);
+        return result;
+    }
+
+    static async measureAsyncPerformance(name, fn) {
+        const start = performance.now();
+        const result = await fn();
+        const end = performance.now();
+        console.log(`${name} took ${end - start} milliseconds`);
+        return result;
+    }
 }
 
-// ===== GLOBAL ERROR HANDLER =====
-window.addEventListener('error', (event) => {
-  console.error('Global error:', event.error);
-  Notifications.error('An unexpected error occurred. Please try again.');
-});
-
-window.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled promise rejection:', event.reason);
-  Notifications.error('A network or processing error occurred.');
-});
-
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🔧 AutoDiag Utils loaded successfully');
-});
+// Make Utils available globally
+window.Utils = Utils;
