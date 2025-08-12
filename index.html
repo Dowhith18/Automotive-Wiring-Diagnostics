@@ -3,139 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI-powered automotive wiring diagnostics tool">
-    <title>Automotive Wiring Diagnostics</title>
+    <meta name="description" content="AI-powered automotive wiring diagnostics tool for professional technicians">
+    <meta name="keywords" content="automotive, diagnostics, wiring, electrical, fault detection, AI, machine learning">
+    <meta name="author" content="Automotive Diagnostics Team">
     
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a1a">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Auto Diagnostics">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16x16.png">
+    <link rel="mask-icon" href="assets/icons/safari-pinned-tab.svg" color="#0066cc">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/dark-theme.css" id="dark-theme">
+    <link rel="stylesheet" href="assets/css/dark-theme.css" media="(prefers-color-scheme: dark)">
     
-    <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/js/app.js" as="script">
+    <link rel="preload" href="assets/css/styles.css" as="style">
+    
+    <!-- TensorFlow.js - Core ML Framework -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js" defer></script>
+    
+    <title>Automotive Wiring Diagnostics - Professional AI Tool</title>
+    
+    <!-- SEO and Social Media -->
+    <meta property="og:title" content="Automotive Wiring Diagnostics">
+    <meta property="og:description" content="Professional AI-powered automotive electrical diagnostics tool">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/icons/icon-512x512.png">
+    
+    <!-- Security -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://cdn.jsdelivr.net;">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">🔧</div>
+            <h2>Automotive Diagnostics AI</h2>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="loading-progress"></div>
+                </div>
+                <p id="loading-status">Initializing diagnostic systems...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app-container" id="app-container" style="display: none;">
+        <!-- Navigation Header -->
+        <header class="app-header" role="banner">
             <div class="header-content">
-                <h1>🔧 Automotive Diagnostics AI</h1>
+                <div class="logo-section">
+                    <span class="logo-icon">🔧</span>
+                    <h1 class="app-title">Automotive Diagnostics AI</h1>
+                    <span class="version-badge">v1.0</span>
+                </div>
+                
+                <nav class="header-nav" role="navigation">
+                    <button id="diagnostics-tab" class="nav-btn active" data-tab="diagnostics">
+                        <span class="nav-icon">🔍</span>
+                        Diagnostics
+                    </button>
+                    <button id="history-tab" class="nav-btn" data-tab="history">
+                        <span class="nav-icon">📊</span>
+                        History
+                    </button>
+                    <button id="settings-tab" class="nav-btn" data-tab="settings">
+                        <span class="nav-icon">⚙️</span>
+                        Settings
+                    </button>
+                </nav>
+                
                 <div class="header-controls">
-                    <button id="theme-toggle" class="btn-icon" title="Toggle Theme">🌙</button>
-                    <button id="install-btn" class="btn-primary" style="display: none;">Install App</button>
+                    <button id="theme-toggle" class="btn-icon" title="Toggle Dark/Light Theme" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <button id="install-btn" class="btn-primary btn-install" style="display: none;" title="Install App">
+                        <span class="install-icon">📱</span>
+                        Install
+                    </button>
+                    <button id="help-btn" class="btn-icon" title="Help & Documentation">
+                        <span class="help-icon">❓</span>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Diagnostic Panel -->
-            <section class="diagnostic-panel">
-                <div class="panel-header">
-                    <h2>Vehicle Information</h2>
+        <!-- Main Content Area -->
+        <main class="main-content" role="main">
+            <!-- Diagnostics Tab -->
+            <section id="diagnostics-content" class="tab-content active">
+                <!-- Vehicle Information Panel -->
+                <div class="diagnostic-section">
+                    <div class="section-header">
+                        <h2>Vehicle Information</h2>
+                        <span class="section-badge required">Required</span>
+                    </div>
+                    <div class="vehicle-info-grid">
+                        <div class="form-group">
+                            <label for="vehicle-year" class="form-label">
+                                Year <span class="required-asterisk">*</span>
+                            </label>
+                            <input type="number" 
+                                   id="vehicle-year" 
+                                   class="form-input" 
+                                   min="1990" 
+                                   max="2024" 
+                                   placeholder="2020"
+                                   required
+                                   aria-describedby="year-help">
+                            <small id="year-help" class="form-help">Vehicle model year (1990-2024)</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicle-make" class="form-label">
+                                Make <span class="required-asterisk">*</span>
+                            </label>
+                            <select id="vehicle-make" class="form-select" required aria-describedby="make-help">
+                                <option value="">Select Vehicle Make</option>
+                                <option value="acura">Acura</option>
+                                <option value="audi">Audi</option>
+                                <option value="bmw">BMW</option>
+                                <option value="chevrolet">Chevrolet</option>
+                                <option value="chrysler">Chrysler</option>
+                                <option value="dodge">Dodge</option>
+                                <option value="ford">Ford</option>
+                                <option value="gmc">GMC</option>
+                                <option value="honda">Honda</option>
+                                <option value="hyundai">Hyundai</option>
+                                <option value="infiniti">Infiniti</option>
+                                <option value="jeep">Jeep</option>
+                                <option value="kia">Kia</option>
+                                <option value="lexus">Lexus</option>
+                                <option value="mazda">Mazda</option>
+                                <option value="mercedes">Mercedes-Benz</option>
+                                <option value="nissan">Nissan</option>
+                                <option value="ram">Ram</option>
+                                <option value="subaru">Subaru</option>
+                                <option value="toyota">Toyota</option>
+                                <option value="volkswagen">Volkswagen</option>
+                                <option value="volvo">Volvo</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <small id="make-help" class="form-help">Select the vehicle manufacturer</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicle-model" class="form-label">Model</label>
+                            <input type="text" 
+                                   id="vehicle-model" 
+                                   class="form-input" 
+                                   placeholder="F-150, Camry, Accord..."
+                                   aria-describedby="model-help">
+                            <small id="model-help" class="form-help">Vehicle model name</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicle-trim" class="form-label">Trim Level</label>
+                            <input type="text" 
+                                   id="vehicle-trim" 
+                                   class="form-input" 
+                                   placeholder="LX, Sport, Limited..."
+                                   aria-describedby="trim-help">
+                            <small id="trim-help" class="form-help">Trim level or package (optional)</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicle-engine" class="form-label">Engine</label>
+                            <input type="text" 
+                                   id="vehicle-engine" 
+                                   class="form-input" 
+                                   placeholder="2.0L, 3.5L V6, 5.0L V8..."
+                                   aria-describedby="engine-help">
+                            <small id="engine-help" class="form-help">Engine size and type (optional)</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehicle-mileage" class="form-label">Mileage</label>
+                            <input type="number" 
+                                   id="vehicle-mileage" 
+                                   class="form-input" 
+                                   min="0" 
+                                   max="500000" 
+                                   placeholder="75000"
+                                   aria-describedby="mileage-help">
+                            <small id="mileage-help" class="form-help">Current odometer reading</small>
+                        </div>
+                    </div>
                 </div>
-                <div class="vehicle-form">
-                    <div class="form-group">
-                        <label for="vehicle-year">Year:</label>
-                        <input type="number" id="vehicle-year" min="1990" max="2024" placeholder="2020">
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicle-make">Make:</label>
-                        <select id="vehicle-make">
-                            <option value="">Select Make</option>
-                            <option value="ford">Ford</option>
-                            <option value="chevrolet">Chevrolet</option>
-                            <option value="toyota">Toyota</option>
-                            <option value="honda">Honda</option>
-                            <option value="nissan">Nissan</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicle-model">Model:</label>
-                        <input type="text" id="vehicle-model" placeholder="F-150">
-                    </div>
-                </div>
-            </section>
 
-            <!-- Symptom Input -->
-            <section class="symptom-panel">
-                <div class="panel-header">
-                    <h2>Diagnostic Input</h2>
-                </div>
-                <div class="symptom-form">
-                    <div class="form-group">
-                        <label for="symptoms">Describe the symptoms:</label>
-                        <textarea id="symptoms" rows="4" placeholder="Headlights not working, dashboard warning lights, intermittent electrical issues..."></textarea>
+                <!-- Symptom Description Panel -->
+                <div class="diagnostic-section">
+                    <div class="section-header">
+                        <h2>Symptom Description</h2>
+                        <span class="section-badge required">Required</span>
                     </div>
-                    <div class="form-group">
-                        <label for="dtc-codes">DTC Codes (if available):</label>
-                        <input type="text" id="dtc-codes" placeholder="P0601, B1234, U0100">
-                    </div>
-                    <div class="measurement-inputs">
-                        <h3>Electrical Measurements</h3>
-                        <div class="measurements-grid">
-                            <div class="measurement-item">
-                                <label for="battery-voltage">Battery Voltage (V):</label>
-                                <input type="number" id="battery-voltage" step="0.1" placeholder="12.6">
-                            </div>
-                            <div class="measurement-item">
-                                <label for="alternator-output">Alternator Output (V):</label>
-                                <input type="number" id="alternator-output" step="0.1" placeholder="14.4">
-                            </div>
-                            <div class="measurement-item">
-                                <label for="ground-resistance">Ground Resistance (Ω):</label>
-                                <input type="number" id="ground-resistance" step="0.01" placeholder="0.05">
+                    <div class="symptom-input-area">
+                        <div class="form-group">
+                            <label for="symptoms" class="form-label">
+                                Describe the electrical issues <span class="required-asterisk">*</span>
+                            </label>
+                            <textarea id="symptoms" 
+                                     class="form-textarea" 
+                                     rows="6" 
+                                     placeholder="Please describe the electrical problems you're experiencing:
+- When do the symptoms occur?
+- Which systems are affected?
+- Are the issues intermittent or constant?
+- Any recent repairs or modifications?
+
+Example: Headlights flickering when engine is running, dashboard warning lights coming on randomly, battery seems to drain overnight..."
+                                     required
+                                     aria-describedby="symptoms-help"></textarea>
+                            <small id="symptoms-help" class="form-help">
+                                Be as detailed as possible. Include when the problem occurs, which systems are affected, and any patterns you've noticed.
+                            </small>
+                        </div>
+                        
+                        <!-- Quick Symptom Tags -->
+                        <div class="symptom-tags">
+                            <label class="form-label">Common Issues (click to add):</label>
+                            <div class="tag-grid">
+                                <button type="button" class="symptom-tag" data-symptom="Dead battery">🔋 Dead Battery</button>
+                                <button type="button" class="symptom-tag" data-symptom="Lights not working">💡 Lights Not Working</button>
+                                <button type="button" class="symptom-tag" data-symptom="Won't start">🚗 Won't Start</button>
+                                <button type="button" class="symptom-tag" data-symptom="Flickering lights">⚡ Flickering Lights</button>
+                                <button type="button" class="symptom-tag" data-symptom="Intermittent electrical">🔄 Intermittent Issues</button>
+                                <button type="button" class="symptom-tag" data-symptom="Blown fuse">🔗 Blown Fuse</button>
+                                <button type="button" class="symptom-tag" data-symptom="Charging problems">⚡ Charging Issues</button>
+                                <button type="button" class="symptom-tag" data-symptom="Ground fault">🌍 Ground Problems</button>
                             </div>
                         </div>
                     </div>
-                    <button id="diagnose-btn" class="btn-primary btn-large">🔍 Run AI Diagnosis</button>
+                </div>
+
+                <!-- DTC Codes Panel -->
+                <div class="diagnostic-section">
+                    <div class="section-header">
+                        <h2>Diagnostic Trouble Codes</h2>
+                        <span class="section-badge optional">Optional</span>
+                    </div>
+                    <div class="dtc-input-area">
+                        <div class="form-group">
+                            <label for="dtc-codes" class="form-label">DTC Codes</label>
+                            <input type="text" 
+                                   id="dtc-codes" 
+                                   class="form-input" 
+                                   placeholder="P0601, B1234, U0100 (separate multiple codes with commas)"
+                                   aria-describedby="dtc-help">
+                            <small id="dtc-help" class="form-help">
+                                Enter any diagnostic trouble codes from your scan tool. Format: P0123, B4567, etc.
+                            </small>
+                        </div>
+                        
+                        <div class="dtc-categories">
+                            <h4>DTC Code Categories:</h4>
+                            <div class="category-grid">
+                                <div class="category-item">
+                                    <strong>P - Powertrain</strong>
+                                    <span>Engine, transmission, emissions</span>
+                                </div>
+                                <div class="category-item">
+                                    <strong>B - Body</strong>
+                                    <span>Lighting, HVAC, security</span>
+                                </div>
+                                <div class="category-item">
+                                    <strong>C - Chassis</strong>
+                                    <span>Brakes, steering, suspension</span>
+                                </div>
+                                <div class="category-item">
+                                    <strong>U - Network</strong>
+                                    <span>Communication between modules</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Electrical Measurements Panel -->
+                <div class="diagnostic-section">
+                    <div class="section-header">
+                        <h2>Electrical Measurements</h2>
+                        <span class="section-badge recommended">Recommended</span>
+                    </div>
+                    <div class="measurements-container">
+                        <div class="measurement-group">
+                            <h4>Basic Electrical Values</h4>
+                            <div class="measurements-grid">
+                                <div class="measurement-item">
+                                    <label for="battery-voltage" class="form-label">
+                                        Battery Voltage (V)
+                                        <span class="measurement-info" title="Key OFF voltage should be 12.6V, running 13.5-14.4V">ℹ️</span>
+                                    </label>
+                                    <input type="number" 
+                                           id="battery-voltage" 
+                                           class="form-input" 
+                                           step="0.1" 
+                                           min="0" 
+                                           max="20" 
+                                           placeholder="12.6">
+                                    <small class="measurement-range">Normal: 12.6V (OFF), 13.5-14.4V (Running)</small>
+                                </div>
+                                
+                                <div class="measurement-item">
+                                    <label for="alternator-output" class="form-label">
+                                        Alternator Output (V)
+                                        <span class="measurement-info" title="Should be 13.5-14.4V when running">ℹ️</span>
+                                    </label>
+                                    <input type="number" 
+                                           id="alternator-output" 
+                                           class="form-input" 
+                                           step="0.1" 
+                                           min="0" 
+                                           max="20" 
+                                           placeholder="14.2">
+                                    <small class="measurement-range">Normal: 13.5-14.4V</small>
+                                </div>
+                                
+                                <div class="measurement-item">
+                                    <label for="ground-resistance" class="form-label">
+                                        Ground Resistance (Ω)
+                                        <span class="measurement-info" title="Should be less than 0.5Ω">ℹ️</span>
+                                    </label>
+                                    <input type="number" 
+                                           id="ground-resistance" 
+                                           class="form-input" 
+                                           step="0.01" 
+                                           min="0" 
+                                           max="100" 
+                                           placeholder="0.05">
+                                    <small class="measurement-range">Good: &lt;0.5Ω</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="measurement-group">
+                            <h4>Advanced Measurements (Optional)</h4>
+                            <div class="measurements-grid">
+                                <div class="measurement-item">
+                                    <label for="parasitic-draw" class="form-label">Parasitic Draw (mA)</label>
+                                    <input type="number" 
+                                           id="parasitic-draw" 
+                                           class="form-input" 
+                                           step="1" 
+                                           min="0" 
+                                           max="5000" 
+                                           placeholder="25">
+                                    <small class="measurement-range">Normal: &lt;50mA</small>
+                                </div>
+                                
+                                <div class="measurement-item">
+                                    <label for="starter-current" class="form-label">Starter Current (A)</label>
+                                    <input type="number" 
+                                           id="starter-current" 
+                                           class="form-input" 
+                                           step="1" 
+                                           min="0" 
+                                           max="400" 
+                                           placeholder="150">
+                                    <small class="measurement-range">Typical: 100-200A</small>
+                                </div>
+                                
+                                <div class="measurement-item">
+                                    <label for="voltage-drop" class="form-label">Voltage Drop (V)</label>
+                                    <input type="number" 
+                                           id="voltage-drop" 
+                                           class="form-input" 
+                                           step="0.01" 
+                                           min="0" 
+                                           max="5" 
+                                           placeholder="0.1">
+                                    <small class="measurement-range">Good: &lt;0.5V</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diagnostic Action Button -->
+                <div class="diagnostic-actions">
+                    <button id="diagnose-btn" class="btn-primary btn-large btn-diagnostic" disabled>
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Run AI Diagnosis</span>
+                        <span class="btn-spinner" style="display: none;">⚡</span>
+                    </button>
+                    <button id="clear-form-btn" class="btn-secondary">
+                        <span class="btn-icon">🗑️</span>
+                        Clear Form
+                    </button>
                 </div>
             </section>
 
-            <!-- Results Panel -->
-            <section class="results-panel" id="results-panel" style="display: none;">
-                <div class="panel-header">
+            <!-- Diagnostic Results Panel -->
+            <section id="results-panel" class="results-section" style="display: none;">
+                <div class="section-header">
                     <h2>Diagnostic Results</h2>
+                    <div class="result-actions">
+                        <button id="save-results-btn" class="btn-secondary btn-small">
+                            <span class="btn-icon">💾</span>
+                            Save Results
+                        </button>
+                        <button id="print-results-btn" class="btn-secondary btn-small">
+                            <span class="btn-icon">🖨️</span>
+                            Print
+                        </button>
+                        <button id="new-diagnosis-btn" class="btn-primary btn-small">
+                            <span class="btn-icon">🔄</span>
+                            New Diagnosis
+                        </button>
+                    </div>
                 </div>
                 <div id="diagnostic-results" class="results-content">
-                    <!-- Results will be populated by JavaScript -->
+                    <!-- Results will be dynamically populated here -->
                 </div>
             </section>
 
-            <!-- Wiring Diagram Viewer -->
-            <section class="diagram-panel" id="diagram-panel" style="display: none;">
-                <div class="panel-header">
-                    <h2>Wiring Diagram</h2>
-                    <button id="close-diagram" class="btn-secondary">Close</button>
+            <!-- History Tab Content -->
+            <section id="history-content" class="tab-content" style="display: none;">
+                <div class="section-header">
+                    <h2>Diagnostic History</h2>
+                    <button id="export-history-btn" class="btn-secondary">
+                        <span class="btn-icon">📤</span>
+                        Export History
+                    </button>
                 </div>
-                <div class="diagram-viewer">
-                    <canvas id="diagram-canvas"></canvas>
+                <div id="history-list" class="history-container">
+                    <!-- History items will be populated here -->
+                </div>
+            </section>
+
+            <!-- Settings Tab Content -->
+            <section id="settings-content" class="tab-content" style="display: none;">
+                <div class="section-header">
+                    <h2>Application Settings</h2>
+                </div>
+                <div class="settings-container">
+                    <div class="settings-group">
+                        <h3>Display Settings</h3>
+                        <div class="setting-item">
+                            <label for="theme-setting">Color Theme</label>
+                            <select id="theme-setting" class="form-select">
+                                <option value="auto">Auto (System)</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Diagnostic Settings</h3>
+                        <div class="setting-item">
+                            <label for="confidence-threshold">Minimum Confidence Threshold</label>
+                            <input type="range" id="confidence-threshold" min="0.3" max="0.9" step="0.1" value="0.6">
+                            <span class="range-value">60%</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="save-history"> 
+                                Save diagnostic history locally
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
 
-        <!-- Loading Overlay -->
-        <div id="loading-overlay" class="loading-overlay" style="display: none;">
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p>Running AI diagnosis...</p>
+        <!-- Wiring Diagram Modal -->
+        <div id="diagram-modal" class="modal" style="display: none;" role="dialog" aria-labelledby="diagram-title" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="diagram-title">Wiring Diagram</h3>
+                    <button id="close-diagram" class="btn-close" aria-label="Close diagram">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="diagram-viewer">
+                        <canvas id="diagram-canvas" width="800" height="600"></canvas>
+                        <div class="diagram-controls">
+                            <button class="btn-secondary" id="zoom-in">🔍+ Zoom In</button>
+                            <button class="btn-secondary" id="zoom-out">🔍- Zoom Out</button>
+                            <button class="btn-secondary" id="reset-zoom">↻ Reset</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="app-footer">
-            <p>&copy; 2024 Automotive Diagnostics AI - Professional Diagnostic Tool</p>
+        <footer class="app-footer" role="contentinfo">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <p>&copy; 2024 Automotive Diagnostics AI</p>
+                    <p>Professional Electrical Diagnostic Tool</p>
+                </div>
+                <div class="footer-section">
+                    <button id="about-btn" class="footer-link">About</button>
+                    <button id="privacy-btn" class="footer-link">Privacy</button>
+                    <button id="terms-btn" class="footer-link">Terms</button>
+                </div>
+                <div class="footer-section">
+                    <p>Version 1.0.0 | <span id="model-status">AI Ready</span></p>
+                </div>
+            </div>
         </footer>
     </div>
 
-    <!-- Scripts -->
-    <script src="assets/js/utils.js"></script>
-    <script src="assets/js/ml-models.js"></script>
-    <script src="assets/js/diagnostics.js"></script>
-    <script src="assets/js/app.js"></script>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    }, function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Application Scripts -->
+    <script src="assets/js/utils.js" defer></script>
+    <script src="assets/js/ml-models.js" defer></script>
+    <script src="assets/js/diagnostics.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
 </body>
 </html>
