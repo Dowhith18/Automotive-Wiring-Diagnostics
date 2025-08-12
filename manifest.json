@@ -1,132 +1,136 @@
 {
-  "name": "Automotive Wiring Diagnostics",
-  "short_name": "Auto Diagnostics",
-  "description": "Professional AI-powered automotive electrical diagnostics tool for technicians and mechanics",
+  "name": "Intelligent Automotive Wiring Fault Prediction & Diagnostic Manual",
+  "short_name": "AutoDiag Pro",
+  "description": "Professional automotive diagnostic system with AI-powered fault prediction and interactive troubleshooting manual",
   "version": "1.0.0",
-  "start_url": "/",
-  "scope": "/",
+  "manifest_version": 3,
+  "start_url": "/index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#1a1a1a",
-  "theme_color": "#0066cc",
-  "categories": [
-    "automotive",
-    "diagnostics",
-    "tools",
-    "professional",
-    "utilities"
-  ],
+  "theme_color": "#1a1a1a",
+  "background_color": "#000000",
+  "scope": "/",
   "lang": "en-US",
-  "dir": "ltr",
-  "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "assets/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-maskable-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "assets/icons/icon-maskable-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
+  "categories": ["automotive", "diagnostics", "tools", "productivity"],
   "screenshots": [
     {
-      "src": "assets/screenshots/screenshot-wide.png",
-      "sizes": "1024x640",
+      "src": "assets/icons/screenshot-wide.png",
+      "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Diagnostic interface on desktop"
+      "label": "Dashboard view showing diagnostic interface"
     },
     {
-      "src": "assets/screenshots/screenshot-narrow.png",
-      "sizes": "375x812",
+      "src": "assets/icons/screenshot-narrow.png", 
+      "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile diagnostic interface"
     }
   ],
+  "icons": [
+    {
+      "src": "assets/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-96.png",
+      "sizes": "96x96", 
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png", 
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-152.png", 
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192", 
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
   "shortcuts": [
     {
-      "name": "New Diagnosis",
+      "name": "Quick Diagnostic",
       "short_name": "Diagnose",
-      "description": "Start a new automotive diagnosis",
-      "url": "/?action=diagnose",
+      "description": "Start a new diagnostic session",
+      "url": "/index.html#diagnostics",
       "icons": [
         {
-          "src": "assets/icons/shortcut-diagnose.png",
-          "sizes": "96x96"
+          "src": "assets/icons/diagnostic-shortcut.png",
+          "sizes": "192x192"
         }
       ]
     },
     {
-      "name": "View History",
-      "short_name": "History",
-      "description": "View diagnostic history",
-      "url": "/?action=history",
+      "name": "Vehicle Scanner", 
+      "short_name": "Scanner",
+      "description": "Scan vehicle VIN and codes",
+      "url": "/index.html#vehicle-info",
       "icons": [
         {
-          "src": "assets/icons/shortcut-history.png",
-          "sizes": "96x96"
+          "src": "assets/icons/scanner-shortcut.png", 
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "ML Predictions",
+      "short_name": "AI Analysis", 
+      "description": "View AI fault predictions",
+      "url": "/index.html#ml-predictions",
+      "icons": [
+        {
+          "src": "assets/icons/ml-shortcut.png",
+          "sizes": "192x192"
         }
       ]
     }
   ],
   "related_applications": [
     {
-      "platform": "webapp",
-      "url": "https://automotive-diagnostics.app/manifest.json"
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.autodiag.pro",
+      "id": "com.autodiag.pro"
     }
-  ]
+  ],
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay", "standalone"],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate"
 }
