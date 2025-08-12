@@ -1,65 +1,239 @@
-/* Dark automotive theme */
-:root {
-    --primary-blue: #1e40af;
-    --secondary-amber: #f59e0b;
-    --danger-red: #ef4444;
-    --bg-dark: #0f172a;
-    --surface-dark: #1e293b;
-    --text-light: #f1f5f9;
-    --text-secondary: #94a3b8;
+/* ===== DARK THEME ENHANCEMENTS ===== */
+.dark-theme {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-amber: #f59e0b;
+  --accent-purple: #8b5cf6;
 }
 
-/* Responsive grid layout */
-.app-main {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 2rem;
-    padding: 2rem;
+/* Enhanced scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-@media (max-width: 768px) {
-    .app-main {
-        grid-template-columns: 1fr;
-    }
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
 }
 
-/* Interactive form styling */
-.form-group {
-    margin-bottom: 1.5rem;
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
 }
 
-.predict-btn {
-    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-amber));
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-secondary);
 }
 
-.predict-btn:hover {
-    transform: translateY(-2px);
+/* Selection styling */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
 }
 
-/* Results visualization */
-.fault-prediction {
-    background: var(--surface-dark);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border-left: 4px solid var(--danger-red);
+/* Focus indicators for accessibility */
+.dark-theme input:focus,
+.dark-theme select:focus,
+.dark-theme button:focus {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
 }
 
-.confidence-score {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+/* Enhanced button states */
+.dark-theme .btn:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.confidence-bar {
-    height: 8px;
-    background: var(--primary-blue);
-    border-radius: 4px;
-    transition: width 0.5s ease;
+.dark-theme .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading states */
+.dark-theme .loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-theme .loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* Enhanced card hover effects */
+.dark-theme .tool-card:hover,
+.dark-theme .prediction-card:hover,
+.dark-theme .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-blue);
+}
+
+/* Improved form validation states */
+.dark-theme .form-group input:invalid {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.dark-theme .form-group input:valid {
+  border-color: var(--accent-green);
+}
+
+/* Enhanced notification styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-xl);
+  z-index: 1000;
+  animation: slideInRight 0.3s ease;
+  max-width: 400px;
+}
+
+.notification.success {
+  border-left: 4px solid var(--accent-green);
+}
+
+.notification.error {
+  border-left: 4px solid var(--accent-red);
+}
+
+.notification.warning {
+  border-left: 4px solid var(--accent-amber);
+}
+
+.notification.info {
+  border-left: 4px solid var(--accent-blue);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Enhanced modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-primary);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Enhanced tooltip styles */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dark-theme {
+    --bg-primary: #000000;
+    --bg-secondary: #1a1a1a;
+    --text-primary: #ffffff;
+    --border-primary: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
