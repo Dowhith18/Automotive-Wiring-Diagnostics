@@ -3,254 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoDiag Pro - Professional Automotive Diagnostics</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Ford Pro Diagnostics - Professional Automotive Service Tool</title>
+    <link rel="stylesheet" href="assets\css\style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body data-color-scheme="dark">
-    <!-- Header -->
-    <header class="header">
-        <div class="header__container">
-            <div class="header__brand">
-                <h1 class="header__title">AutoDiag Pro</h1>
-                <span class="status status--success">System Online</span>
+<body>
+    <!-- Ford-Style Header -->
+    <header class="ford-header">
+        <div class="ford-header__container">
+            <div class="ford-header__brand">
+                <div class="ford-logo">
+                    <div class="ford-oval">
+                        <span class="ford-text">FORD</span>
+                    </div>
+                </div>
+                <div class="ford-header__title">
+                    <h1>Pro Diagnostics</h1>
+                    <span class="ford-subtitle">Professional Service Tool</span>
+                </div>
+                <div class="system-status">
+                    <div class="status-indicator status-online"></div>
+                    <span class="status-text">System Online</span>
+                </div>
             </div>
-            <nav class="header__nav">
-                <button class="btn btn--secondary btn--sm" id="themeToggle">
-                    <span id="themeIcon">☀️</span> Light Mode
+            <nav class="ford-header__nav">
+                <button class="btn ford-btn ford-btn--secondary" id="connectionBtn">
+                    <span id="connectionIcon">🔌</span> Connect OBD
                 </button>
-                <button class="btn btn--primary btn--sm" id="exportReport">Export Report</button>
+                <button class="btn ford-btn ford-btn--primary" id="exportReport">
+                    <span>📄</span> Export Report
+                </button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <nav class="sidebar__nav">
-                <button class="nav-tab active" data-tab="dashboard">
-                    <span class="nav-tab__icon">📊</span>
-                    Dashboard
+    <!-- Main Ford Layout -->
+    <div class="ford-main-layout">
+        <!-- Ford Sidebar Navigation -->
+        <aside class="ford-sidebar">
+            <nav class="ford-nav">
+                <button class="ford-nav-tab active" data-tab="dashboard">
+                    <span class="ford-nav-icon">📊</span>
+                    <span class="ford-nav-text">Dashboard</span>
                 </button>
-                <button class="nav-tab" data-tab="vehicle">
-                    <span class="nav-tab__icon">🚗</span>
-                    Vehicle Info
+                <button class="ford-nav-tab" data-tab="vehicle">
+                    <span class="ford-nav-icon">🚗</span>
+                    <span class="ford-nav-text">Vehicle ID</span>
                 </button>
-                <button class="nav-tab" data-tab="diagnostic">
-                    <span class="nav-tab__icon">🔧</span>
-                    Diagnostics
+                <button class="ford-nav-tab" data-tab="diagnostic">
+                    <span class="ford-nav-icon">🔧</span>
+                    <span class="ford-nav-text">Live Data</span>
                 </button>
-                <button class="nav-tab" data-tab="predictions">
-                    <span class="nav-tab__icon">🤖</span>
-                    ML Predictions
+                <button class="ford-nav-tab" data-tab="predictions">
+                    <span class="ford-nav-icon">🤖</span>
+                    <span class="ford-nav-text">ML Analysis</span>
                 </button>
-                <button class="nav-tab" data-tab="manual">
-                    <span class="nav-tab__icon">📋</span>
-                    Manual
+                <button class="ford-nav-tab" data-tab="manual">
+                    <span class="ford-nav-icon">📋</span>
+                    <span class="ford-nav-text">Service Manual</span>
                 </button>
-                <button class="nav-tab" data-tab="results">
-                    <span class="nav-tab__icon">✅</span>
-                    Results
+                <button class="ford-nav-tab" data-tab="results">
+                    <span class="ford-nav-icon">✅</span>
+                    <span class="ford-nav-text">Reports</span>
                 </button>
             </nav>
+            
+            <div class="ford-sidebar-footer">
+                <div class="connection-status">
+                    <div class="connection-indicator" id="connectionIndicator"></div>
+                    <span id="connectionStatus">Disconnected</span>
+                </div>
+            </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="content">
+        <!-- Main Content Area -->
+        <main class="ford-content">
             <!-- Dashboard Tab -->
-            <div class="tab-content active" id="dashboard">
-                <div class="tab-header">
-                    <h2>Diagnostic Dashboard</h2>
-                    <p class="text-secondary">System overview and key metrics</p>
-                </div>
-                <div class="dashboard-grid">
-                    <div class="card dashboard-card">
-                        <div class="card__body">
-                            <h3>Active Vehicles</h3>
-                            <div class="metric">
-                                <span class="metric__value">1</span>
-                                <span class="metric__label">Currently Connected</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card dashboard-card">
-                        <div class="card__body">
-                            <h3>Fault Predictions</h3>
-                            <div class="metric">
-                                <span class="metric__value" id="faultCount">0</span>
-                                <span class="metric__label">Detected Issues</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card dashboard-card">
-                        <div class="card__body">
-                            <h3>Diagnostic Status</h3>
-                            <div class="status status--warning">Ready to Scan</div>
-                        </div>
-                    </div>
+            <div class="ford-tab-content active" id="dashboard">
+                <div class="ford-tab-header">
+                    <h2>Service Dashboard</h2>
+                    <p class="ford-subtitle">Real-time vehicle diagnostics and system overview</p>
                 </div>
                 
-                <div class="card">
-                    <div class="card__body">
-                        <h3>Real-Time Sensor Data</h3>
-                        <div class="sensor-grid" id="sensorGrid">
-                            <!-- Sensor data will be populated by JavaScript -->
+                <div class="ford-metrics-grid">
+                    <div class="ford-metric-card">
+                        <div class="ford-metric-icon">🚗</div>
+                        <div class="ford-metric-content">
+                            <h3>Vehicle Status</h3>
+                            <div class="ford-metric-value" id="vehicleStatus">Ready</div>
+                            <div class="ford-metric-label">Current State</div>
+                        </div>
+                    </div>
+                    <div class="ford-metric-card">
+                        <div class="ford-metric-icon">⚡</div>
+                        <div class="ford-metric-content">
+                            <h3>System Health</h3>
+                            <div class="ford-metric-value" id="systemHealth">98%</div>
+                            <div class="ford-metric-label">Overall Score</div>
+                        </div>
+                    </div>
+                    <div class="ford-metric-card">
+                        <div class="ford-metric-icon">🔍</div>
+                        <div class="ford-metric-content">
+                            <h3>Active DTCs</h3>
+                            <div class="ford-metric-value" id="activeDTCs">3</div>
+                            <div class="ford-metric-label">Trouble Codes</div>
+                        </div>
+                    </div>
+                    <div class="ford-metric-card">
+                        <div class="ford-metric-icon">🎯</div>
+                        <div class="ford-metric-content">
+                            <h3>ML Confidence</h3>
+                            <div class="ford-metric-value" id="mlConfidence">89%</div>
+                            <div class="ford-metric-label">Prediction Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ford-dashboard-grid">
+                    <div class="ford-card ford-live-sensors">
+                        <div class="ford-card-header">
+                            <h3>Live Sensor Data</h3>
+                            <div class="ford-update-indicator">
+                                <span class="ford-pulse-dot"></span>
+                                <span>Live</span>
+                            </div>
+                        </div>
+                        <div class="ford-sensor-grid" id="sensorGrid">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="ford-card ford-dtc-panel">
+                        <div class="ford-card-header">
+                            <h3>Active DTC Codes</h3>
+                            <div class="ford-severity-legend">
+                                <span class="ford-severity-high">High</span>
+                                <span class="ford-severity-medium">Medium</span>
+                                <span class="ford-severity-low">Low</span>
+                            </div>
+                        </div>
+                        <div class="ford-dtc-list" id="dtcList">
+                            <!-- Populated by JavaScript -->
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Vehicle Information Tab -->
-            <div class="tab-content" id="vehicle">
-                <div class="tab-header">
-                    <h2>Vehicle Information</h2>
-                    <p class="text-secondary">Enter vehicle details for accurate diagnostics</p>
+            <div class="ford-tab-content" id="vehicle">
+                <div class="ford-tab-header">
+                    <h2>Vehicle Identification</h2>
+                    <p class="ford-subtitle">Enter or scan vehicle information for accurate diagnostics</p>
                 </div>
-                <div class="card">
-                    <div class="card__body">
-                        <form class="vehicle-form" id="vehicleForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label" for="vin">Vehicle VIN</label>
-                                    <input type="text" class="form-control" id="vin" placeholder="1HGCM82633A123456" maxlength="17">
-                                    <small class="form-text">Enter 17-character VIN number</small>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="make">Make</label>
-                                    <select class="form-control" id="make">
-                                        <option value="">Select Make</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="model">Model</label>
-                                    <input type="text" class="form-control" id="model" placeholder="e.g., Accord, F-150">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="year">Year</label>
-                                    <input type="number" class="form-control" id="year" placeholder="2020" min="1980" max="2025">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn--primary">Save Vehicle Info</button>
-                        </form>
+                
+                <div class="ford-card">
+                    <div class="ford-card-header">
+                        <h3>Vehicle Information</h3>
+                        <button class="btn ford-btn ford-btn--outline" id="scanVinBtn">
+                            <span>📷</span> Scan VIN
+                        </button>
                     </div>
+                    <form class="ford-vehicle-form" id="vehicleForm">
+                        <div class="ford-form-grid">
+                            <div class="ford-form-group">
+                                <label class="ford-label">Vehicle VIN</label>
+                                <input type="text" class="ford-input" id="vin" placeholder="1FTEW1EP8LFC12345" maxlength="17" value="1FTEW1EP8LFC12345">
+                                <div class="ford-input-help">17-character Vehicle Identification Number</div>
+                            </div>
+                            <div class="ford-form-group">
+                                <label class="ford-label">Make</label>
+                                <select class="ford-select" id="make">
+                                    <option value="Ford" selected>Ford</option>
+                                    <option value="Lincoln">Lincoln</option>
+                                </select>
+                            </div>
+                            <div class="ford-form-group">
+                                <label class="ford-label">Model</label>
+                                <input type="text" class="ford-input" id="model" value="F-150" placeholder="e.g., F-150, Mustang">
+                            </div>
+                            <div class="ford-form-group">
+                                <label class="ford-label">Year</label>
+                                <input type="number" class="ford-input" id="year" value="2024" min="1980" max="2025">
+                            </div>
+                            <div class="ford-form-group">
+                                <label class="ford-label">Engine</label>
+                                <input type="text" class="ford-input" id="engine" value="3.5L EcoBoost V6" placeholder="e.g., 3.5L EcoBoost V6">
+                            </div>
+                            <div class="ford-form-group">
+                                <label class="ford-label">Electrical System</label>
+                                <select class="ford-select" id="electrical">
+                                    <option value="12V" selected>12V Standard</option>
+                                    <option value="48V">48V Mild Hybrid</option>
+                                    <option value="HEV">Hybrid Electric</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn ford-btn ford-btn--primary ford-btn--large">
+                            <span>💾</span> Save Vehicle Information
+                        </button>
+                    </form>
                 </div>
             </div>
 
-            <!-- Diagnostic Data Tab -->
-            <div class="tab-content" id="diagnostic">
-                <div class="tab-header">
-                    <h2>Diagnostic Data Input</h2>
-                    <p class="text-secondary">Enter symptoms and DTC codes</p>
+            <!-- Live Diagnostic Data Tab -->
+            <div class="ford-tab-content" id="diagnostic">
+                <div class="ford-tab-header">
+                    <h2>Live Diagnostic Stream</h2>
+                    <p class="ford-subtitle">Real-time OBD data monitoring and analysis</p>
                 </div>
-                <div class="diagnostic-grid">
-                    <div class="card">
-                        <div class="card__body">
-                            <h3>DTC Codes</h3>
-                            <div class="form-group">
-                                <label class="form-label" for="dtcCodes">Diagnostic Trouble Codes</label>
-                                <textarea class="form-control" id="dtcCodes" rows="4" placeholder="Enter DTC codes (e.g., P0171, P0174)"></textarea>
-                            </div>
-                            <div class="dtc-suggestions">
-                                <h4>Common DTCs:</h4>
-                                <div class="dtc-chips" id="dtcChips">
-                                    <!-- DTC chips will be populated by JavaScript -->
-                                </div>
-                            </div>
+                
+                <div class="ford-diagnostic-grid">
+                    <div class="ford-card ford-gauges-panel">
+                        <div class="ford-card-header">
+                            <h3>Engine Parameters</h3>
+                            <div class="ford-update-rate">Updates every 2.5s</div>
+                        </div>
+                        <div class="ford-gauges-grid" id="gaugesGrid">
+                            <!-- Populated by JavaScript -->
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card__body">
-                            <h3>Symptoms</h3>
-                            <div class="form-group">
-                                <label class="form-label" for="symptoms">Observed Symptoms</label>
-                                <textarea class="form-control" id="symptoms" rows="6" placeholder="Describe symptoms: rough idle, check engine light, etc."></textarea>
-                            </div>
-                            <button class="btn btn--primary btn--full-width" id="runDiagnostic">Run ML Analysis</button>
+                    
+                    <div class="ford-card ford-realtime-chart">
+                        <div class="ford-card-header">
+                            <h3>Real-time Data Trends</h3>
+                            <select class="ford-select ford-select--small" id="chartSelector">
+                                <option value="engine_rpm">Engine RPM</option>
+                                <option value="battery_voltage">Battery Voltage</option>
+                                <option value="coolant_temp">Coolant Temperature</option>
+                            </select>
                         </div>
+                        <div class="ford-chart-container" style="position: relative; height: 300px;">
+                            <canvas id="liveChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ford-card">
+                    <div class="ford-card-header">
+                        <h3>Diagnostic Commands</h3>
+                    </div>
+                    <div class="ford-diagnostic-controls">
+                        <button class="btn ford-btn ford-btn--primary" id="startDiagnostic">
+                            <span>▶️</span> Start Full Scan
+                        </button>
+                        <button class="btn ford-btn ford-btn--secondary" id="clearCodes">
+                            <span>🗑️</span> Clear DTCs
+                        </button>
+                        <button class="btn ford-btn ford-btn--outline" id="freezeFrame">
+                            <span>❄️</span> Capture Freeze Frame
+                        </button>
+                        <button class="btn ford-btn ford-btn--warning" id="emergencyStop">
+                            <span>⏹️</span> Emergency Stop
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- ML Predictions Tab -->
-            <div class="tab-content" id="predictions">
-                <div class="tab-header">
-                    <h2>ML Fault Predictions</h2>
-                    <p class="text-secondary">AI-powered fault detection and analysis</p>
+            <div class="ford-tab-content" id="predictions">
+                <div class="ford-tab-header">
+                    <h2>AI Fault Prediction</h2>
+                    <p class="ford-subtitle">Machine learning powered predictive diagnostics</p>
                 </div>
-                <div class="predictions-container" id="predictionsContainer">
-                    <div class="card">
-                        <div class="card__body">
-                            <p class="text-secondary">Run diagnostic analysis to see ML predictions</p>
-                            <button class="btn btn--outline" onclick="document.querySelector('[data-tab=diagnostic]').click()">Go to Diagnostics</button>
-                        </div>
-                    </div>
+                
+                <div class="ford-predictions-container" id="predictionsContainer">
+                    <!-- Populated by JavaScript -->
                 </div>
             </div>
 
-            <!-- Interactive Manual Tab -->
-            <div class="tab-content" id="manual">
-                <div class="tab-header">
-                    <h2>Interactive Diagnostic Manual</h2>
-                    <p class="text-secondary">Step-by-step troubleshooting guide</p>
+            <!-- Service Manual Tab -->
+            <div class="ford-tab-content" id="manual">
+                <div class="ford-tab-header">
+                    <h2>Interactive Service Manual</h2>
+                    <p class="ford-subtitle">Step-by-step diagnostic and repair procedures</p>
                 </div>
-                <div class="diagnostic-steps" id="diagnosticSteps">
-                    <!-- Steps will be populated by JavaScript -->
+                
+                <div class="ford-manual-steps" id="manualSteps">
+                    <!-- Populated by JavaScript -->
                 </div>
             </div>
 
-            <!-- Results Tab -->
-            <div class="tab-content" id="results">
-                <div class="tab-header">
-                    <h2>Diagnostic Results & Recommendations</h2>
-                    <p class="text-secondary">Analysis summary and repair recommendations</p>
+            <!-- Results & Reports Tab -->
+            <div class="ford-tab-content" id="results">
+                <div class="ford-tab-header">
+                    <h2>Diagnostic Results</h2>
+                    <p class="ford-subtitle">Professional service reports and recommendations</p>
                 </div>
-                <div class="results-container" id="resultsContainer">
-                    <div class="card">
-                        <div class="card__body">
-                            <p class="text-secondary">Complete diagnostic analysis to view results</p>
+                
+                <div class="ford-results-container" id="resultsContainer">
+                    <div class="ford-card ford-report-placeholder">
+                        <div class="ford-card-body">
+                            <div class="ford-placeholder-content">
+                                <div class="ford-placeholder-icon">📋</div>
+                                <h3>No Active Reports</h3>
+                                <p>Run a complete diagnostic scan to generate service reports</p>
+                                <button class="btn ford-btn ford-btn--primary" onclick="document.querySelector('[data-tab=diagnostic]').click()">
+                                    Start Diagnostic Scan
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- Right Panel -->
-        <aside class="right-panel">
-            <div class="card">
-                <div class="card__body">
+        <!-- Live Data Panel -->
+        <aside class="ford-live-panel">
+            <div class="ford-card ford-alerts-panel">
+                <div class="ford-card-header">
                     <h3>System Alerts</h3>
-                    <div class="alerts-list" id="alertsList">
-                        <div class="alert alert--info">
-                            <span>System initialized successfully</span>
-                        </div>
-                    </div>
+                    <div class="ford-alert-count" id="alertCount">0</div>
+                </div>
+                <div class="ford-alerts-list" id="alertsList">
+                    <!-- Populated by JavaScript -->
                 </div>
             </div>
             
-            <div class="card">
-                <div class="card__body">
-                    <h3>Real-Time Data</h3>
-                    <div class="realtime-chart" style="position: relative; height: 200px;">
-                        <canvas id="realtimeChart"></canvas>
+            <div class="ford-card ford-quick-stats">
+                <div class="ford-card-header">
+                    <h3>Quick Stats</h3>
+                </div>
+                <div class="ford-stats-list">
+                    <div class="ford-stat-item">
+                        <span class="ford-stat-label">Scan Time</span>
+                        <span class="ford-stat-value" id="scanTime">--</span>
+                    </div>
+                    <div class="ford-stat-item">
+                        <span class="ford-stat-label">Data Points</span>
+                        <span class="ford-stat-value" id="dataPoints">0</span>
+                    </div>
+                    <div class="ford-stat-item">
+                        <span class="ford-stat-label">Last Update</span>
+                        <span class="ford-stat-value" id="lastUpdate">--</span>
                     </div>
                 </div>
             </div>
         </aside>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer__container">
-            <p>&copy; 2025 AutoDiag Pro - Professional Automotive Diagnostics</p>
-            <div class="footer__info">
-                <span>Version 2.1.0</span>
-                <span>Connected</span>
+    <!-- Ford Footer -->
+    <footer class="ford-footer">
+        <div class="ford-footer-container">
+            <div class="ford-footer-brand">
+                <span>&copy; 2025 Ford Motor Company</span>
+                <span>Professional Service Tools</span>
+            </div>
+            <div class="ford-footer-info">
+                <span>Version 3.2.1</span>
+                <span class="ford-separator">|</span>
+                <span id="systemStatus">System Ready</span>
+                <span class="ford-separator">|</span>
+                <span id="currentTime"></span>
             </div>
         </div>
     </footer>
 
-    <script src="app.js"></script>
+    <script src="assets\js\app.js"></script>
 </body>
 </html>

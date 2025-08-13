@@ -738,301 +738,710 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* Automotive Diagnostic Application Styles */
+/* Ford Pro Diagnostics - Professional Automotive Service Tool Styles */
 
-/* Custom automotive color palette using design system */
+/* Ford Color System */
 :root {
-  --color-automotive-orange: #ff8c00;
-  --color-automotive-amber: #ffc107;
-  --color-automotive-dark: var(--color-charcoal-800);
-  --color-automotive-darker: var(--color-slate-900);
-  --color-automotive-light: var(--color-gray-200);
+  /* Ford Primary Colors */
+  --ford-blue-primary: #003478;
+  --ford-blue-secondary: #1D4F8C;
+  --ford-blue-light: #2E5F99;
+  --ford-blue-dark: #001a3d;
+  
+  /* Ford Accent Colors */
+  --ford-silver: #C4C4C4;
+  --ford-silver-light: #E5E5E5;
+  --ford-orange: #FF6B1A;
+  --ford-success: #00A651;
+  --ford-error: #D32F2F;
+  --ford-warning: #FF8C00;
+  --ford-white: #FFFFFF;
+  --ford-black: #000000;
+  
+  /* Ford Semantic Colors */
+  --ford-bg-primary: var(--ford-blue-primary);
+  --ford-bg-secondary: var(--ford-blue-secondary);
+  --ford-bg-surface: var(--color-surface);
+  --ford-text-primary: var(--color-text);
+  --ford-text-secondary: var(--color-text-secondary);
+  --ford-border: var(--color-border);
+  --ford-accent: var(--ford-orange);
+  
+  /* Ford Gradients */
+  --ford-gradient-primary: linear-gradient(135deg, var(--ford-blue-primary) 0%, var(--ford-blue-secondary) 100%);
+  --ford-gradient-accent: linear-gradient(135deg, var(--ford-orange) 0%, #ff8533 100%);
+  
+  /* Ford Shadows */
+  --ford-shadow-sm: 0 2px 4px rgba(0, 52, 120, 0.08);
+  --ford-shadow-md: 0 4px 8px rgba(0, 52, 120, 0.12);
+  --ford-shadow-lg: 0 8px 24px rgba(0, 52, 120, 0.16);
+  
+  /* Ford Spacing */
+  --ford-space-xs: 4px;
+  --ford-space-sm: 8px;
+  --ford-space-md: 16px;
+  --ford-space-lg: 24px;
+  --ford-space-xl: 32px;
 }
 
-[data-color-scheme="dark"] {
-  --color-automotive-primary: var(--color-automotive-orange);
-  --color-automotive-secondary: var(--color-automotive-amber);
-  --color-diagnostic-bg: var(--color-bg-6);
-  --color-diagnostic-surface: var(--color-surface);
-  --color-diagnostic-accent: var(--color-bg-2);
+/* Base Ford Layout */
+body {
+  background: var(--color-background);
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-[data-color-scheme="light"] {
-  --color-automotive-primary: var(--color-orange-500);
-  --color-automotive-secondary: var(--color-orange-400);
-  --color-diagnostic-bg: var(--color-bg-6);
-  --color-diagnostic-surface: var(--color-surface);
-  --color-diagnostic-accent: var(--color-bg-2);
-}
-
-/* Layout Structure */
-.main-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr 300px;
-  grid-template-rows: 1fr;
-  min-height: calc(100vh - 140px);
-  gap: var(--space-16);
-  padding: var(--space-16);
-}
-
-/* Header */
-.header {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-16) 0;
+/* Ford Header */
+.ford-header {
+  background: var(--ford-gradient-primary);
+  color: var(--ford-white);
+  padding: var(--ford-space-md) 0;
+  box-shadow: var(--ford-shadow-md);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 }
 
-.header__container {
+.ford-header__container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-16);
+  padding: 0 var(--ford-space-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.header__brand {
+.ford-header__brand {
   display: flex;
   align-items: center;
-  gap: var(--space-16);
+  gap: var(--ford-space-lg);
 }
 
-.header__title {
-  color: var(--color-automotive-primary);
+.ford-logo {
+  display: flex;
+  align-items: center;
+}
+
+.ford-oval {
+  background: var(--ford-white);
+  color: var(--ford-blue-primary);
+  padding: var(--ford-space-xs) var(--ford-space-md);
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.ford-header__title h1 {
+  margin: 0;
   font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.ford-subtitle {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
   margin: 0;
 }
 
-.header__nav {
+.system-status {
   display: flex;
-  gap: var(--space-12);
+  align-items: center;
+  gap: var(--ford-space-sm);
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--ford-space-sm) var(--ford-space-md);
+  border-radius: var(--radius-full);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-online { background: var(--ford-success); }
+.status-offline { background: var(--ford-error); }
+.status-warning { background: var(--ford-warning); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.ford-header__nav {
+  display: flex;
+  gap: var(--ford-space-md);
   align-items: center;
 }
 
-/* Sidebar Navigation */
-.sidebar {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
-  padding: var(--space-16);
-  height: fit-content;
+/* Ford Buttons */
+.ford-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ford-space-sm);
+  padding: var(--ford-space-sm) var(--ford-space-md);
+  border: none;
+  border-radius: var(--radius-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  font-size: var(--font-size-base);
+  text-decoration: none;
 }
 
-.sidebar__nav {
+.ford-btn--primary {
+  background: var(--ford-gradient-accent);
+  color: var(--ford-white);
+  box-shadow: var(--ford-shadow-sm);
+}
+
+.ford-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ford-shadow-md);
+}
+
+.ford-btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ford-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ford-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ford-btn--outline {
+  background: transparent;
+  color: var(--ford-text-primary);
+  border: 1px solid var(--ford-border);
+}
+
+.ford-btn--outline:hover {
+  background: var(--color-secondary);
+}
+
+.ford-btn--warning {
+  background: var(--ford-error);
+  color: var(--ford-white);
+}
+
+.ford-btn--large {
+  padding: var(--ford-space-md) var(--ford-space-xl);
+  font-size: var(--font-size-lg);
+}
+
+/* Ford Main Layout */
+.ford-main-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  min-height: calc(100vh - 120px);
+  gap: var(--ford-space-lg);
+  padding: var(--ford-space-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Ford Sidebar */
+.ford-sidebar {
+  background: var(--ford-bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ford-border);
+  box-shadow: var(--ford-shadow-sm);
+  padding: var(--ford-space-lg);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.ford-nav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--ford-space-sm);
 }
 
-.nav-tab {
+.ford-nav-tab {
   display: flex;
   align-items: center;
-  gap: var(--space-12);
-  padding: var(--space-12) var(--space-16);
+  gap: var(--ford-space-md);
+  padding: var(--ford-space-md);
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   border-radius: var(--radius-base);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-standard);
   text-align: left;
   width: 100%;
-}
-
-.nav-tab:hover {
-  background: var(--color-secondary);
-  color: var(--color-text);
-}
-
-.nav-tab.active {
-  background: var(--color-diagnostic-bg);
-  color: var(--color-automotive-primary);
-  border-color: var(--color-automotive-primary);
-}
-
-.nav-tab__icon {
-  font-size: var(--font-size-lg);
-}
-
-/* Main Content Area */
-.content {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
-  padding: var(--space-24);
-  overflow-y: auto;
-  max-height: calc(100vh - 180px);
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-.tab-header {
-  margin-bottom: var(--space-24);
-  padding-bottom: var(--space-16);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.tab-header h2 {
-  color: var(--color-text);
-  margin-bottom: var(--space-8);
-}
-
-.text-secondary {
-  color: var(--color-text-secondary);
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-16);
-  margin-bottom: var(--space-24);
-}
-
-.dashboard-card {
-  background: var(--color-diagnostic-bg);
-  border: 1px solid var(--color-border);
-}
-
-.metric {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  margin-top: var(--space-12);
-}
-
-.metric__value {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-automotive-primary);
-}
-
-.metric__label {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-/* Sensor Grid */
-.sensor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-16);
-}
-
-.sensor-card {
-  background: var(--color-diagnostic-accent);
-  padding: var(--space-16);
-  border-radius: var(--radius-base);
-  border: 1px solid var(--color-border);
-}
-
-.sensor-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-8);
-}
-
-.sensor-card__title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-}
-
-.sensor-card__value {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-}
-
-.sensor-card__unit {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  margin-left: var(--space-4);
-}
-
-/* Vehicle Form */
-.vehicle-form {
-  max-width: 800px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-16);
-  margin-bottom: var(--space-24);
-}
-
-.form-text {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  margin-top: var(--space-4);
-}
-
-/* Diagnostic Grid */
-.diagnostic-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-20);
-}
-
-.dtc-suggestions {
-  margin-top: var(--space-16);
-}
-
-.dtc-suggestions h4 {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-8);
-}
-
-.dtc-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-}
-
-.dtc-chip {
-  background: var(--color-secondary);
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-standard);
-}
-
-.dtc-chip:hover {
-  background: var(--color-secondary-hover);
-}
-
-/* Predictions */
-.predictions-container {
-  display: grid;
-  gap: var(--space-16);
-}
-
-.prediction-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-20);
+  color: var(--ford-text-secondary);
   position: relative;
   overflow: hidden;
 }
 
-.prediction-card::before {
+.ford-nav-tab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: var(--ford-gradient-primary);
+  transition: width var(--duration-normal) var(--ease-standard);
+  z-index: 0;
+}
+
+.ford-nav-tab.active::before {
+  width: 4px;
+}
+
+.ford-nav-tab:hover {
+  background: var(--color-bg-1);
+  color: var(--ford-text-primary);
+}
+
+.ford-nav-tab.active {
+  background: var(--color-bg-1);
+  color: var(--ford-blue-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ford-nav-icon,
+.ford-nav-text {
+  position: relative;
+  z-index: 1;
+}
+
+.ford-nav-icon {
+  font-size: var(--font-size-lg);
+  width: 24px;
+  text-align: center;
+}
+
+.ford-sidebar-footer {
+  margin-top: var(--ford-space-xl);
+  padding-top: var(--ford-space-lg);
+  border-top: 1px solid var(--ford-border);
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: var(--ford-space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--ford-text-secondary);
+}
+
+.connection-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ford-error);
+}
+
+.connection-indicator.connected {
+  background: var(--ford-success);
+  animation: pulse 2s infinite;
+}
+
+/* Ford Content Area */
+.ford-content {
+  background: var(--ford-bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ford-border);
+  box-shadow: var(--ford-shadow-sm);
+  overflow: hidden;
+}
+
+.ford-tab-content {
+  display: none;
+  padding: var(--ford-space-xl);
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
+
+.ford-tab-content.active {
+  display: block;
+}
+
+.ford-tab-header {
+  margin-bottom: var(--ford-space-xl);
+  padding-bottom: var(--ford-space-lg);
+  border-bottom: 2px solid var(--color-bg-1);
+}
+
+.ford-tab-header h2 {
+  margin: 0 0 var(--ford-space-sm) 0;
+  color: var(--ford-blue-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Ford Cards */
+.ford-card {
+  background: var(--ford-bg-surface);
+  border: 1px solid var(--ford-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--ford-shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--ford-space-lg);
+}
+
+.ford-card-header {
+  background: var(--color-bg-1);
+  padding: var(--ford-space-lg);
+  border-bottom: 1px solid var(--ford-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ford-card-header h3 {
+  margin: 0;
+  color: var(--ford-blue-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ford-card-body {
+  padding: var(--ford-space-lg);
+}
+
+/* Ford Metrics Grid */
+.ford-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ford-space-lg);
+  margin-bottom: var(--ford-space-xl);
+}
+
+.ford-metric-card {
+  background: var(--ford-gradient-primary);
+  color: var(--ford-white);
+  padding: var(--ford-space-lg);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--ford-space-md);
+  box-shadow: var(--ford-shadow-md);
+}
+
+.ford-metric-icon {
+  font-size: 2rem;
+  opacity: 0.9;
+}
+
+.ford-metric-content h3 {
+  margin: 0 0 var(--ford-space-sm) 0;
+  font-size: var(--font-size-base);
+  opacity: 0.9;
+}
+
+.ford-metric-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--ford-space-xs);
+}
+
+.ford-metric-label {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+/* Dashboard Grid */
+.ford-dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--ford-space-lg);
+}
+
+/* Sensor Grid */
+.ford-sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--ford-space-md);
+  padding: var(--ford-space-lg);
+}
+
+.ford-sensor-item {
+  background: var(--color-bg-2);
+  padding: var(--ford-space-md);
+  border-radius: var(--radius-base);
+  border-left: 4px solid var(--ford-accent);
+  text-align: center;
+}
+
+.ford-sensor-label {
+  font-size: var(--font-size-xs);
+  color: var(--ford-text-secondary);
+  margin-bottom: var(--ford-space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ford-sensor-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--ford-text-primary);
+}
+
+.ford-sensor-unit {
+  font-size: var(--font-size-sm);
+  color: var(--ford-text-secondary);
+  margin-left: var(--ford-space-xs);
+}
+
+.ford-sensor-status {
+  font-size: var(--font-size-xs);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-top: var(--ford-space-xs);
+}
+
+.ford-sensor-status.normal { 
+  background: rgba(var(--color-success-rgb), 0.2); 
+  color: var(--ford-success); 
+}
+.ford-sensor-status.warning { 
+  background: rgba(255, 140, 0, 0.2); 
+  color: var(--ford-warning); 
+}
+.ford-sensor-status.error { 
+  background: rgba(var(--color-error-rgb), 0.2); 
+  color: var(--ford-error); 
+}
+
+/* DTC Panel */
+.ford-dtc-list {
+  padding: var(--ford-space-lg);
+}
+
+.ford-dtc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ford-space-md);
+  border: 1px solid var(--ford-border);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--ford-space-sm);
+  background: var(--ford-bg-surface);
+}
+
+.ford-dtc-code {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-bold);
+  color: var(--ford-blue-primary);
+}
+
+.ford-dtc-description {
+  flex: 1;
+  margin: 0 var(--ford-space-md);
+  color: var(--ford-text-primary);
+}
+
+.ford-severity-high { 
+  background: var(--ford-error); 
+  color: white; 
+  padding: 2px 8px; 
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+.ford-severity-medium { 
+  background: var(--ford-warning); 
+  color: white; 
+  padding: 2px 8px; 
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+.ford-severity-low { 
+  background: var(--ford-success); 
+  color: white; 
+  padding: 2px 8px; 
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+/* Forms */
+.ford-vehicle-form {
+  padding: var(--ford-space-lg);
+}
+
+.ford-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--ford-space-lg);
+  margin-bottom: var(--ford-space-xl);
+}
+
+.ford-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ford-space-sm);
+}
+
+.ford-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--ford-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.ford-input,
+.ford-select {
+  padding: var(--ford-space-md);
+  border: 2px solid var(--ford-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+  background: var(--ford-bg-surface);
+  color: var(--ford-text-primary);
+}
+
+.ford-input:focus,
+.ford-select:focus {
+  outline: none;
+  border-color: var(--ford-blue-primary);
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.1);
+}
+
+.ford-input-help {
+  font-size: var(--font-size-xs);
+  color: var(--ford-text-secondary);
+}
+
+.ford-select--small {
+  padding: var(--ford-space-sm);
+  font-size: var(--font-size-sm);
+}
+
+/* Diagnostic Controls */
+.ford-diagnostic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ford-space-lg);
+  margin-bottom: var(--ford-space-lg);
+}
+
+.ford-gauges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--ford-space-md);
+  padding: var(--ford-space-lg);
+}
+
+.ford-gauge {
+  text-align: center;
+  padding: var(--ford-space-md);
+  background: var(--color-bg-3);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--ford-border);
+}
+
+.ford-gauge-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--ford-blue-primary);
+}
+
+.ford-gauge-label {
+  font-size: var(--font-size-xs);
+  color: var(--ford-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: var(--ford-space-xs);
+}
+
+.ford-diagnostic-controls {
+  display: flex;
+  gap: var(--ford-space-md);
+  padding: var(--ford-space-lg);
+  flex-wrap: wrap;
+}
+
+/* Live Panel */
+.ford-live-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ford-space-lg);
+}
+
+.ford-alerts-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ford-alert {
+  padding: var(--ford-space-md);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--ford-space-sm);
+  border-left: 4px solid;
+  font-size: var(--font-size-sm);
+}
+
+.ford-alert--info {
+  background: var(--color-bg-1);
+  border-left-color: var(--color-info);
+  color: var(--color-info);
+}
+
+.ford-alert--success {
+  background: var(--color-bg-3);
+  border-left-color: var(--ford-success);
+  color: var(--ford-success);
+}
+
+.ford-alert--warning {
+  background: var(--color-bg-2);
+  border-left-color: var(--ford-warning);
+  color: var(--ford-warning);
+}
+
+.ford-alert--error {
+  background: var(--color-bg-4);
+  border-left-color: var(--ford-error);
+  color: var(--ford-error);
+}
+
+.ford-stats-list {
+  padding: var(--ford-space-lg);
+}
+
+.ford-stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--ford-space-sm) 0;
+  border-bottom: 1px solid var(--ford-border);
+}
+
+.ford-stat-item:last-child {
+  border-bottom: none;
+}
+
+.ford-stat-label {
+  color: var(--ford-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.ford-stat-value {
+  color: var(--ford-text-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+/* Predictions */
+.ford-predictions-container {
+  display: grid;
+  gap: var(--ford-space-lg);
+}
+
+.ford-prediction-card {
+  background: var(--ford-bg-surface);
+  border: 1px solid var(--ford-border);
+  border-radius: var(--radius-lg);
+  padding: var(--ford-space-lg);
+  position: relative;
+  box-shadow: var(--ford-shadow-sm);
+}
+
+.ford-prediction-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1040,41 +1449,21 @@ select.form-control {
   width: 4px;
   height: 100%;
   background: var(--severity-color, var(--color-info));
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
 }
 
-.prediction-card.severity-high::before {
-  --severity-color: var(--color-error);
-}
+.ford-prediction-card.severity-high::before { --severity-color: var(--ford-error); }
+.ford-prediction-card.severity-medium::before { --severity-color: var(--ford-warning); }
+.ford-prediction-card.severity-low::before { --severity-color: var(--ford-success); }
 
-.prediction-card.severity-medium::before {
-  --severity-color: var(--color-warning);
-}
-
-.prediction-card.severity-low::before {
-  --severity-color: var(--color-success);
-}
-
-.prediction-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--space-12);
-}
-
-.prediction-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.confidence-meter {
+.ford-confidence-meter {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
-  margin: var(--space-12) 0;
+  gap: var(--ford-space-md);
+  margin: var(--ford-space-md) 0;
 }
 
-.confidence-bar {
+.ford-confidence-bar {
   flex: 1;
   height: 8px;
   background: var(--color-secondary);
@@ -1082,310 +1471,263 @@ select.form-control {
   overflow: hidden;
 }
 
-.confidence-fill {
+.ford-confidence-fill {
   height: 100%;
-  background: var(--color-automotive-primary);
+  background: var(--ford-gradient-accent);
   border-radius: var(--radius-full);
   transition: width var(--duration-normal) var(--ease-standard);
 }
 
-.confidence-value {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-automotive-primary);
-  font-size: var(--font-size-sm);
-}
-
-.symptoms-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-6);
-  margin-top: var(--space-12);
-}
-
-.symptom-tag {
-  background: var(--color-diagnostic-accent);
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
-}
-
-/* Diagnostic Steps */
-.diagnostic-steps {
-  display: grid;
-  gap: var(--space-16);
-}
-
-.step-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.step-header {
-  background: var(--color-diagnostic-bg);
-  padding: var(--space-16);
+/* Update Indicators */
+.ford-update-indicator {
   display: flex;
   align-items: center;
-  gap: var(--space-12);
+  gap: var(--ford-space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--ford-success);
+}
+
+.ford-pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--ford-success);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.ford-update-rate {
+  font-size: var(--font-size-xs);
+  color: var(--ford-text-secondary);
+  background: var(--color-bg-2);
+  padding: var(--ford-space-xs) var(--ford-space-sm);
+  border-radius: var(--radius-sm);
+}
+
+/* Manual Steps */
+.ford-manual-steps {
+  display: grid;
+  gap: var(--ford-space-md);
+}
+
+.ford-step-card {
+  border: 1px solid var(--ford-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--ford-shadow-sm);
+}
+
+.ford-step-header {
+  background: var(--color-bg-1);
+  padding: var(--ford-space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--ford-space-md);
   cursor: pointer;
 }
 
-.step-number {
-  width: 32px;
-  height: 32px;
-  background: var(--color-automotive-primary);
-  color: var(--color-btn-primary-text);
-  border-radius: var(--radius-full);
+.ford-step-number {
+  width: 40px;
+  height: 40px;
+  background: var(--ford-gradient-primary);
+  color: var(--ford-white);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 
-.step-title {
+.ford-step-title {
+  flex: 1;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--ford-text-primary);
 }
 
-.step-time {
-  margin-left: auto;
+.ford-step-duration {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--ford-text-secondary);
+  background: var(--color-bg-2);
+  padding: var(--ford-space-xs) var(--ford-space-sm);
+  border-radius: var(--radius-sm);
 }
 
-.step-content {
-  padding: var(--space-16);
-  border-top: 1px solid var(--color-border);
+.ford-step-content {
+  padding: var(--ford-space-lg);
+  background: var(--ford-bg-surface);
+  border-top: 1px solid var(--ford-border);
 }
 
-.step-content.hidden {
+.ford-step-content.hidden {
   display: none;
 }
 
-/* Right Panel */
-.right-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-16);
+/* Placeholders */
+.ford-report-placeholder {
+  text-align: center;
 }
 
-.alerts-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
+.ford-placeholder-content {
+  padding: var(--ford-space-xl);
 }
 
-.alert {
-  padding: var(--space-12);
-  border-radius: var(--radius-base);
-  font-size: var(--font-size-sm);
-  border: 1px solid transparent;
-}
-
-.alert--info {
-  background: var(--color-bg-1);
-  color: var(--color-info);
-  border-color: rgba(var(--color-info-rgb), 0.2);
-}
-
-.alert--success {
-  background: var(--color-bg-3);
-  color: var(--color-success);
-  border-color: rgba(var(--color-success-rgb), 0.2);
-}
-
-.alert--warning {
-  background: var(--color-bg-2);
-  color: var(--color-warning);
-  border-color: rgba(var(--color-warning-rgb), 0.2);
-}
-
-.alert--error {
-  background: var(--color-bg-4);
-  color: var(--color-error);
-  border-color: rgba(var(--color-error-rgb), 0.2);
-}
-
-/* Results */
-.results-summary {
-  background: var(--color-diagnostic-bg);
-  padding: var(--space-20);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--space-20);
-}
-
-.results-grid {
-  display: grid;
-  gap: var(--space-16);
-}
-
-.recommendation-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-20);
-}
-
-.recommendation-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-12);
-  margin-bottom: var(--space-12);
-}
-
-.priority-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: var(--radius-full);
-}
-
-.priority-high {
-  background: var(--color-error);
-}
-
-.priority-medium {
-  background: var(--color-warning);
-}
-
-.priority-low {
-  background: var(--color-success);
+.ford-placeholder-icon {
+  font-size: 4rem;
+  opacity: 0.5;
+  margin-bottom: var(--ford-space-lg);
 }
 
 /* Footer */
-.footer {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  padding: var(--space-16) 0;
-  margin-top: var(--space-32);
+.ford-footer {
+  background: var(--ford-gradient-primary);
+  color: var(--ford-white);
+  padding: var(--ford-space-lg) 0;
+  margin-top: var(--ford-space-xl);
 }
 
-.footer__container {
+.ford-footer-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-16);
+  padding: 0 var(--ford-space-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.footer__info {
+.ford-footer-brand {
   display: flex;
-  gap: var(--space-16);
+  flex-direction: column;
+  gap: var(--ford-space-xs);
+}
+
+.ford-footer-info {
+  display: flex;
+  align-items: center;
+  gap: var(--ford-space-md);
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+}
+
+.ford-separator {
+  opacity: 0.5;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .main-layout {
-    grid-template-columns: 200px 1fr 250px;
+  .ford-main-layout {
+    grid-template-columns: 220px 1fr 280px;
   }
   
-  .diagnostic-grid {
+  .ford-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ford-diagnostic-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 968px) {
-  .main-layout {
+  .ford-main-layout {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
   }
   
-  .sidebar {
+  .ford-sidebar {
     order: 3;
+    position: static;
   }
   
-  .content {
+  .ford-content {
     order: 1;
   }
   
-  .right-panel {
+  .ford-live-panel {
     order: 2;
   }
   
-  .sidebar__nav {
+  .ford-nav {
     flex-direction: row;
     overflow-x: auto;
-    gap: var(--space-4);
+    gap: var(--ford-space-xs);
   }
   
-  .nav-tab {
+  .ford-nav-tab {
     white-space: nowrap;
     flex-shrink: 0;
+    padding: var(--ford-space-sm) var(--ford-space-md);
   }
 }
 
 @media (max-width: 640px) {
-  .header__container {
+  .ford-header__container {
     flex-direction: column;
-    gap: var(--space-12);
-    text-align: center;
+    gap: var(--ford-space-md);
   }
   
-  .header__nav {
-    justify-content: center;
+  .ford-main-layout {
+    padding: var(--ford-space-md);
+    gap: var(--ford-space-md);
   }
   
-  .main-layout {
-    padding: var(--space-8);
-    gap: var(--space-8);
-  }
-  
-  .content {
-    padding: var(--space-16);
-  }
-  
-  .dashboard-grid {
+  .ford-metrics-grid {
     grid-template-columns: 1fr;
   }
   
-  .sensor-grid {
+  .ford-sensor-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .ford-form-grid {
     grid-template-columns: 1fr;
   }
   
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer__container {
+  .ford-diagnostic-controls {
     flex-direction: column;
-    gap: var(--space-8);
+  }
+  
+  .ford-footer-container {
+    flex-direction: column;
+    gap: var(--ford-space-md);
     text-align: center;
   }
 }
 
-/* Theme Toggle Button Styling */
-#themeToggle {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
+/* Scrollbars */
+.ford-tab-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Chart container */
-.realtime-chart {
-  margin-top: var(--space-12);
-}
-
-/* Custom scrollbar for webkit browsers */
-.content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content::-webkit-scrollbar-track {
+.ford-tab-content::-webkit-scrollbar-track {
   background: var(--color-secondary);
   border-radius: var(--radius-sm);
 }
 
-.content::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+.ford-tab-content::-webkit-scrollbar-thumb {
+  background: var(--ford-blue-primary);
   border-radius: var(--radius-sm);
 }
 
-.content::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+.ford-tab-content::-webkit-scrollbar-thumb:hover {
+  background: var(--ford-blue-secondary);
+}
+
+/* Chart Container */
+.ford-chart-container {
+  margin: var(--ford-space-md);
+}
+
+/* Alert Count Badge */
+.ford-alert-count {
+  background: var(--ford-error);
+  color: var(--ford-white);
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  min-width: 20px;
+  text-align: center;
+}
+
+.ford-alert-count:empty {
+  display: none;
 }
